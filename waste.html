@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Waste Management</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f4f4f4;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #fff;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        .waste-categories {
+            margin-top: 20px;
+        }
+
+        .waste-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .waste-options button {
+            flex: 1 1 calc(33.333% - 10px);
+            padding: 15px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        .waste-options button:hover {
+            background-color: #0056b3;
+        }
+
+        .waste-options button:active {
+            background-color: #003f7d;
+        }
+
+        #selected-waste-list {
+            margin-top: 20px;
+            background: #eaf4fc;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        #selected-waste-list h2 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .selected-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background: #f8f8f8;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        .selected-item button {
+            background-color: #ff4d4d;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .selected-item button:hover {
+            background-color: #cc0000;
+        }
+
+        .actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .actions button {
+            padding: 10px 15px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        .actions button:hover {
+            background-color: #0056b3;
+        }
+
+        .actions button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+
+        /* Notification Styling */
+        #notification {
+            display: none;
+            padding: 10px;
+            margin-top: 20px;
+            border-radius: 5px;
+            text-align: center;
+            background-color: #28a745;
+            color: white;
+        }
+
+        #notification.error {
+            background-color: #dc3545;
+        }
+
+        /* Arrow Button Styling */
+        .arrow-button {
+            background-color: #0078d4;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 24px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+        }
+
+        .arrow-button:hover {
+            background-color: #005a9e;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Waste Management</h1>
+        <p>Select waste categories and types to proceed.</p>
+
+        <!-- Waste Categories -->
+        <div class="waste-categories">
+            <h2>Disposed Waste</h2>
+            <div class="waste-options">
+                <button data-type="wet-waste" data-category="disposed">Wet Waste</button>
+                <button data-type="dry-waste" data-category="disposed">Dry Waste</button>
+                <button data-type="e-waste" data-category="disposed">E-waste</button>
+                <button data-type="textile-waste" data-category="disposed">Textile Waste</button>
+                <button data-type="footwear-waste" data-category="disposed">Footwear Waste</button>
+                <button data-type="furniture-waste" data-category="disposed">Furniture Waste</button>
+            </div>
+
+            <h2>Burned Waste</h2>
+            <div class="waste-options">
+                <button data-type="wet-waste" data-category="burned">Wet Waste</button>
+                <button data-type="dry-waste" data-category="burned">Dry Waste</button>
+                <button data-type="e-waste" data-category="burned">E-waste</button>
+                <button data-type="textile-waste" data-category="burned">Textile Waste</button>
+                <button data-type="footwear-waste" data-category="burned">Footwear Waste</button>
+                <button data-type="furniture-waste" data-category="burned">Furniture Waste</button>
+            </div>
+        </div>
+
+        <!-- Selected Waste List -->
+        <div id="selected-waste-list">
+            <h2>Selected Waste</h2>
+            <div id="selected-items"></div>
+        </div>
+
+        <!-- Notification -->
+        <div id="notification"></div>
+
+        <!-- Actions -->
+        <div class="actions">
+            <button id="saveButton">Save</button>
+        </div>
+    </div>
+
+    <!-- Arrow Button to Navigate to Waste Calculation Page -->
+    <button class="arrow-button" onclick="window.location.href='wastecalc.html'">→</button>
+
+    <script>
+        // Array to store selected waste items
+        let selectedWaste = [];
+
+        // Add event listeners to waste buttons
+        const buttons = document.querySelectorAll('.waste-options button');
+        buttons.forEach(button => {
+            button.addEventListener('click', () => {
+                const type = button.getAttribute('data-type');
+                const category = button.getAttribute('data-category');
+
+                // Add to selected waste array
+                selectedWaste.push({ type, category });
+
+                // Update the selected waste list display
+                updateSelectedWasteList();
+            });
+        });
+
+        // Function to update the selected waste list display
+        function updateSelectedWasteList() {
+            const selectedItemsContainer = document.getElementById('selected-items');
+            selectedItemsContainer.innerHTML = ''; // Clear the list
+
+            selectedWaste.forEach((item, index) => {
+                const itemDiv = document.createElement('div');
+                itemDiv.className = 'selected-item';
+                itemDiv.innerHTML = `
+                    <span>${item.type.replace('-', ' ')} (${item.category})</span>
+                    <button onclick="removeSelectedWaste(${index})">Remove</button>
+                `;
+                selectedItemsContainer.appendChild(itemDiv);
+            });
+        }
+
+        // Function to remove a selected waste item
+        function removeSelectedWaste(index) {
+            selectedWaste.splice(index, 1); // Remove the item from the array
+            updateSelectedWasteList(); // Update the display
+        }
+
+        // Save button functionality
+        document.getElementById('saveButton').addEventListener('click', () => {
+            // Send selected waste to the backend
+            fetch('/save_waste', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ selectedWaste }), // Send the selected waste array
+            })
+            .then(response => response.json())
+            .then(data => {
+                const notification = document.getElementById('notification');
+                if (data.message) {
+                    notification.textContent = data.message; // Show success message
+                    notification.style.display = 'block';
+                    notification.classList.remove('error');
+                } else {
+                    notification.textContent = 'Failed to save data!';
+                    notification.style.display = 'block';
+                    notification.classList.add('error');
+                }
+                setTimeout(() => {
+                    notification.style.display = 'none'; // Hide notification after 3 seconds
+                }, 3000);
+            })
+            .catch(error => {
+                console.error('Error saving data:', error);
+                const notification = document.getElementById('notification');
+                notification.textContent = 'An error occurred while saving data!';
+                notification.style.display = 'block';
+                notification.classList.add('error');
+                setTimeout(() => {
+                    notification.style.display = 'none'; // Hide notification after 3 seconds
+                }, 3000);
+            });
+        });
+    </script>
+</body>
+</html>

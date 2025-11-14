@@ -1,0 +1,1446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carbon Footprint Challenges</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .header-section {
+            background-color: #3cb371 ;
+            color: white;
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+            border-radius: 0 0 20px 20px;
+        }
+        .challenge-card {
+            border-radius: 15px;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            border: none;
+            overflow: hidden;
+            margin-bottom: 25px;
+            height: 100%;
+        }
+        .challenge-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 20px rgba(0,0,0,0.15);
+        }
+        .category-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 5px 10px;
+            border-radius: 20px;
+        }
+        .energy { background-color: #ffc107; color: #000; }
+        .travel { background-color: #17a2b8; color: #fff; }
+        .food { background-color: #28a745; color: #fff; }
+        .waste { background-color: #6f42c1; color: #fff; }
+        .community { background-color: #fd7e14; color: #000; }
+        .co2-badge {
+            background-color: #20c997;
+            color: white;
+        }
+        .points-badge {
+            background-color: #6c757d;
+            color: white;
+        }
+        .btn-start {
+            background-color: #3cb371;
+            border: none;
+            border-radius: 30px;
+            padding: 8px 20px;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        .btn-start:hover {
+            background-color:  #3cb371;
+            transform: scale(1.05);
+        }
+        .modal-content {
+            border-radius: 15px;
+            border: none;
+        }
+        .modal-header {
+            background-color: #28a745;
+            color: white;
+            border-radius: 15px 15px 0 0 !important;
+        }
+        .btn-complete {
+            background-color: #28a745;
+            border: none;
+            padding: 10px 25px;
+            font-weight: 500;
+            border-radius: 30px;
+        }
+        .btn-complete:hover {
+            background-color: #218838;
+        }
+        .stats-icon {
+            font-size: 1.2rem;
+            margin-right: 5px;
+        }
+        .challenge-title {
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+        .filter-btn {
+            border-radius: 20px;
+            margin: 5px;
+            font-weight: 500;
+        }
+        .filter-btn.active {
+            background-color: #28a745;
+            color: white;
+        }
+        .points-dashboard {
+            background: #ffffff;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px auto;
+            max-width: 800px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .points-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .points-circle {
+            background: linear-gradient(135deg, #2e8b57, #1a5c3a);
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto;
+            color: white;
+            box-shadow: 0 4px 15px rgba(46,139,87,0.3);
+        }
+        #total-points {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .points-label {
+            font-size: 0.9em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .recent-points {
+            background: #f5f5f5;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 20px;
+        }
+        .points-notification {
+            background: #e8f5e9;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            animation: slideIn 0.3s ease-out;
+        }
+        @keyframes slideIn {
+            from {
+                transform: translateX(-100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        .points-earned {
+            color: #2e8b57;
+            font-weight: bold;
+        }
+        .challenge-time {
+            color: #666;
+            font-size: 0.9em;
+        }
+        .tree-achievement-container {
+            background: #ffffff;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px auto;
+            max-width: 800px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        .tree-counter {
+            font-size: 1.5em;
+            color: #2e8b57;
+            margin-bottom: 15px;
+        }
+        .tree-counter i {
+            margin-right: 10px;
+        }
+        .points-to-tree {
+            margin-top: 10px;
+        }
+        .progress-bar {
+            background: #e0e0e0;
+            height: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            overflow: hidden;
+        }
+        .progress {
+            background: #2e8b57;
+            height: 100%;
+            width: 0%;
+            transition: width 0.5s ease-in-out;
+        }
+        .tree-planted {
+            animation: treeGrow 1s ease-in-out;
+        }
+        .tree-celebration {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            text-align: center;
+            z-index: 1000;
+        }
+        .celebration-content i {
+            font-size: 4em;
+            color: #2e8b57;
+            margin-bottom: 15px;
+        }
+        .celebration-content h3 {
+            color: #2e8b57;
+            margin-bottom: 10px;
+        }
+        .dashboard-container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+        .points-display {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .points-circle {
+            background: linear-gradient(135deg, #2e8b57, #1a5c3a);
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto;
+            color: white;
+            box-shadow: 0 4px 15px rgba(46,139,87,0.3);
+        }
+        #total-points {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .points-label {
+            font-size: 0.9em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .tree-achievement-container {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-top: 20px;
+        }
+        .tree-counter {
+            font-size: 1.5em;
+            color: #2e8b57;
+            margin-bottom: 15px;
+        }
+        .tree-counter i {
+            margin-right: 10px;
+        }
+        .points-to-tree {
+            margin-top: 10px;
+        }
+        .progress-bar {
+            background: #e0e0e0;
+            height: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            overflow: hidden;
+        }
+        .progress {
+            background: #2e8b57;
+            height: 100%;
+            width: 0%;
+            transition: width 0.5s ease-in-out;
+        }
+        @keyframes treeGrow {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+        .tree-planted {
+            animation: treeGrow 1s ease-in-out;
+        }
+        /* Dashboard Styles */
+        .dashboard-wrapper {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background: #ffffff;
+            border-radius: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .points-dashboard {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .total-points-display {
+            margin-bottom: 20px;
+        }
+        .points-circle {
+            background: linear-gradient(135deg, #2e8b57, #1a5c3a);
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto;
+            color: white;
+            box-shadow: 0 4px 15px rgba(46,139,87,0.3);
+        }
+        #total-points {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .points-label {
+            font-size: 0.9em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        /* Notification Area */
+        .notification-area {
+            margin-top: 20px;
+        }
+        .notification {
+            background: #e8f5e9;
+            color: #2e8b57;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            animation: slideIn 0.3s ease-out;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .notification.success {
+            background: #e8f5e9;
+            color: #2e8b57;
+        }
+        .notification.achievement {
+            background: #fff3e0;
+            color: #f57c00;
+        }
+        @keyframes slideIn {
+            from {
+                transform: translateY(-20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        /* Tree Progress Styles */
+        .tree-progress-container {
+            background: #f5f5f5;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+        .tree-counter {
+            font-size: 1.5em;
+            color: #2e8b57;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        .progress-bar-container {
+            margin-top: 10px;
+        }
+        .progress-text {
+            margin-bottom: 5px;
+            color: #666;
+        }
+        .progress-bar {
+            background: #e0e0e0;
+            height: 10px;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        .progress {
+            background: #2e8b57;
+            height: 100%;
+            width: 0%;
+            transition: width 0.5s ease-in-out;
+        }
+        .points-remaining {
+            text-align: right;
+            margin-top: 5px;
+            color: #666;
+            font-size: 0.9em;
+        }
+        /* Challenge Items Styles */
+        .challenge-item {
+            background: white;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+        }
+        .challenge-item:hover {
+            transform: translateY(-2px);
+        }
+        .challenge-item.completed {
+            opacity: 0.7;
+        }
+        .challenge-btn {
+            background: #2e8b57;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .challenge-btn:hover {
+            background: #1a5c3a;
+        }
+        .challenge-btn:disabled {
+            background: #cccccc;
+            cursor: not-allowed;
+        }
+        /* Navbar styles */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(135deg, #2e8b57, #3cb371);
+            padding: 1rem 2rem;
+            color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar .logo {
+            font-size: 1.5em;
+            font-weight: 600;
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .navbar .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            padding: 8px 15px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .navbar a:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                padding: 1rem;
+            }
+
+            .navbar .nav-links {
+                flex-direction: column;
+                width: 100%;
+                margin-top: 1rem;
+            }
+
+            .navbar a {
+                width: 100%;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <div class="navbar">
+        <a href="/main.html" class="logo">
+            <i class="fas fa-leaf"></i>
+            Carbon Footprint Calculator
+        </a>
+        <div class="nav-links">
+            <a href="/report.html">
+                <i class="fas fa-chart-bar"></i>
+                Report
+            </a>
+            <a href="/main.html">
+                <i class="fas fa-home"></i>
+                Main
+            </a>
+            <a href="/profile.html">
+                <i class="fas fa-user"></i>
+                Profile
+            </a>
+            <a href="/community.html">
+                <i class="fas fa-users"></i>
+                Community
+            </a>
+            <a href="/challenges.html">
+                <i class="fas fa-trophy"></i>
+                Challenges
+            </a>
+            
+        </div>
+    </div>
+
+    <!-- Header Section -->
+    <div class="header-section">
+        <div class="container text-center">
+            <h1><i class="fas fa-trophy me-2"></i> Carbon Challenges</h1>
+            <p class="lead">Complete challenges to earn points and reduce your carbon footprint!</p>
+        </div>
+    </div>
+
+    <!-- Add this notification system and points display -->
+    <div class="dashboard-wrapper">
+        <!-- Points Display -->
+        <div class="points-dashboard">
+            <div class="total-points-display">
+                <div class="points-circle">
+                    <span id="total-points">0</span>
+                    <span class="points-label">TOTAL POINTS</span>
+                </div>
+            </div>
+            
+            <!-- Notification Area -->
+            <div id="notification-area" class="notification-area"></div>
+        </div>
+
+        <!-- Tree Progress Display -->
+        <div class="tree-progress-container">
+            <div class="tree-counter">
+                <i class="fas fa-tree"></i>
+                <span id="tree-count">0</span> Trees Planted
+            </div>
+            <div class="progress-bar-container">
+                <div class="progress-text">Progress to next tree:</div>
+                <div class="progress-bar">
+                    <div id="tree-progress" class="progress"></div>
+                </div>
+                <div class="points-remaining">
+                    <span id="points-to-next-tree">50</span> points needed
+                </div>
+            </div>
+            <div class="tree-impact-info mt-3 text-center" style="color: #2e8b57; font-size: 0.9em;">
+                <i class="fas fa-info-circle me-2"></i>
+                Each tree planted equals to saving 2kg of carbon emissions!
+            </div>
+        </div>
+    </div>
+
+    <!-- Challenges Grid -->
+    <div class="container py-4">
+        <div class="row" id="challengesContainer">
+            <!-- Challenge 1 -->
+            <div class="col-md-6 col-lg-4 mb-4 challenge-item">
+                <div class="card challenge-card">
+                    <div class="card-body position-relative">
+                        <span class="badge category-badge energy">
+                            Energy
+                        </span>
+                        
+                        <h5 class="challenge-title">Chill at 24°C</h5>
+                        
+                        <div class="d-flex justify-content-between mb-3">
+                            <span class="badge co2-badge p-2">
+                                <i class="fas fa-leaf stats-icon"></i>
+                                0.8 kg CO₂ saved
+                            </span>
+                            <span class="badge points-badge p-2">
+                                <i class="fas fa-star stats-icon"></i>
+                                20 pts
+                            </span>
+                        </div>
+                        
+                        <button class="btn btn-primary btn-sm btn-start w-100 start-challenge"
+                                data-bs-toggle="modal" 
+                                data-bs-target="#challengeModal"
+                                data-id="1"
+                                data-name="Chill at 24°C"
+                                data-desc="Set AC no lower than 24°C"
+                                data-co2="0.8"
+                                data-points="20">
+                            Start Challenge
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Challenge 2 -->
+            <div class="col-md-6 col-lg-4 mb-4 challenge-item">
+                <div class="card challenge-card">
+                    <div class="card-body position-relative">
+                        <span class="badge category-badge energy">
+                            Energy
+                        </span>
+                        
+                        <h5 class="challenge-title">WiFi Power Down</h5>
+                        
+                        <div class="d-flex justify-content-between mb-3">
+                            <span class="badge co2-badge p-2">
+                                <i class="fas fa-leaf stats-icon"></i>
+                                0.1 kg CO₂ saved
+                            </span>
+                            <span class="badge points-badge p-2">
+                                <i class="fas fa-star stats-icon"></i>
+                                2 pts
+                            </span>
+                        </div>
+                        
+                        <button class="btn btn-primary btn-sm btn-start w-100 start-challenge"
+                                data-bs-toggle="modal" 
+                                data-bs-target="#challengeModal"
+                                data-id="2"
+                                data-name="WiFi Power Down"
+                                data-desc="Turn off WiFi when not in use"
+                                data-co2="0.1"
+                                data-points="2">
+                            Start Challenge
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Add more challenges as needed -->
+            <!-- Challenge 3 -->
+            <div class="col-md-6 col-lg-4 mb-4 challenge-item">
+                <div class="card challenge-card">
+                    <div class="card-body position-relative">
+                        <span class="badge category-badge travel">
+                            Travel
+                        </span>
+                        
+                        <h5 class="challenge-title">Walk the Talk</h5>
+                        
+                        <div class="d-flex justify-content-between mb-3">
+                            <span class="badge co2-badge p-2">
+                                <i class="fas fa-leaf stats-icon"></i>
+                                1.2 kg CO₂ saved
+                            </span>
+                            <span class="badge points-badge p-2">
+                                <i class="fas fa-star stats-icon"></i>
+                                30 pts
+                            </span>
+                        </div>
+                        
+                        <button class="btn btn-primary btn-sm btn-start w-100 start-challenge"
+                                data-bs-toggle="modal" 
+                                data-bs-target="#challengeModal"
+                                data-id="3"
+                                data-name="Walk the Talk"
+                                data-desc="Walk to work or nearby places"
+                                data-co2="1.2"
+                                data-points="30">
+                            Start Challenge
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Challenge 4 -->
+            <div class="col-md-6 col-lg-4 mb-4 challenge-item">
+                <div class="card challenge-card">
+                    <div class="card-body position-relative">
+                        <span class="badge category-badge community">
+                            Community
+                        </span>
+                        
+                        <h5 class="challenge-title">Carpool Crew Day</h5>
+                        
+                        <div class="d-flex justify-content-between mb-3">
+                            <span class="badge co2-badge p-2">
+                                <i class="fas fa-leaf stats-icon"></i>
+                                0.6 kg CO₂ saved
+                            </span>
+                            <span class="badge points-badge p-2">
+                                <i class="fas fa-star stats-icon"></i>
+                                15 pts
+                            </span>
+                        </div>
+                        
+                        <button class="btn btn-primary btn-sm btn-start w-100 start-challenge"
+                                data-bs-toggle="modal" 
+                                data-bs-target="#challengeModal"
+                                data-id="4"
+                                data-name="Carpool Crew Day"
+                                data-desc="Share a ride with friends"
+                                data-co2="0.6"
+                                data-points="15">
+                            Start Challenge
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Challenge 5 -->
+            <div class="col-md-6 col-lg-4 mb-4 challenge-item">
+                <div class="card challenge-card">
+                    <div class="card-body position-relative">
+                        <span class="badge category-badge food">
+                            Food
+                        </span>
+                        
+                        <h5 class="challenge-title">Bus it Like a Boss</h5>
+                        
+                        <div class="d-flex justify-content-between mb-3">
+                            <span class="badge co2-badge p-2">
+                                <i class="fas fa-leaf stats-icon"></i>
+                                0.9 kg CO₂ saved
+                            </span>
+                            <span class="badge points-badge p-2">
+                                <i class="fas fa-star stats-icon"></i>
+                                23 pts
+                            </span>
+                        </div>
+                        
+                        <button class="btn btn-primary btn-sm btn-start w-100 start-challenge"
+                                data-bs-toggle="modal" 
+                                data-bs-target="#challengeModal"
+                                data-id="5"
+                                data-name="Bus it Like a Boss"
+                                data-desc="Use public transport instead of car"
+                                data-co2="0.9"
+                                data-points="23">
+                            Start Challenge
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Challenge 6 -->
+            <div class="col-md-6 col-lg-4 mb-4 challenge-item">
+                <div class="card challenge-card">
+                    <div class="card-body position-relative">
+                        <span class="badge category-badge food">
+                            Food
+                        </span>
+                        
+                        <h5 class="challenge-title">Meal Prep, Waste Not!</h5>
+                        
+                        <div class="d-flex justify-content-between mb-3">
+                            <span class="badge co2-badge p-2">
+                                <i class="fas fa-leaf stats-icon"></i>
+                                2.0 kg CO₂ saved
+                            </span>
+                            <span class="badge points-badge p-2">
+                                <i class="fas fa-star stats-icon"></i>
+                                50 pts
+                            </span>
+                        </div>
+                        
+                        <button class="btn btn-primary btn-sm btn-start w-100 start-challenge"
+                                data-bs-toggle="modal" 
+                                data-bs-target="#challengeModal"
+                                data-id="6"
+                                data-name="Meal Prep, Waste Not!"
+                                data-desc="Weekly meal prep with zero waste"
+                                data-co2="2.0"
+                                data-points="50">
+                            Start Challenge
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Challenge 7 -->
+            <div class="col-md-6 col-lg-4 mb-4 challenge-item">
+                <div class="card challenge-card">
+                    <div class="card-body position-relative">
+                        <span class="badge category-badge food">
+                            Food
+                        </span>
+                        
+                        <h5 class="challenge-title">No-Meat Monday</h5>
+                        
+                        <div class="d-flex justify-content-between mb-3">
+                            <span class="badge co2-badge p-2">
+                                <i class="fas fa-leaf stats-icon"></i>
+                                1.5 kg CO₂ saved
+                            </span>
+                            <span class="badge points-badge p-2">
+                                <i class="fas fa-star stats-icon"></i>
+                                38 pts
+                            </span>
+                        </div>
+                        
+                        <button class="btn btn-primary btn-sm btn-start w-100 start-challenge"
+                                data-bs-toggle="modal" 
+                                data-bs-target="#challengeModal"
+                                data-id="7"
+                                data-name="No-Meat Monday"
+                                data-desc="Go meat-free for the day"
+                                data-co2="1.5"
+                                data-points="38">
+                            Start Challenge
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Challenge 8 -->
+            <div class="col-md-6 col-lg-4 mb-4 challenge-item">
+                <div class="card challenge-card">
+                    <div class="card-body position-relative">
+                        <span class="badge category-badge waste">
+                            Waste
+                        </span>
+                        
+                        <h5 class="challenge-title">Tree Planter Mode</h5>
+                        
+                        <div class="d-flex justify-content-between mb-3">
+                            <span class="badge co2-badge p-2">
+                                <i class="fas fa-leaf stats-icon"></i>
+                                2.0 kg CO₂ saved
+                            </span>
+                            <span class="badge points-badge p-2">
+                                <i class="fas fa-star stats-icon"></i>
+                                50 pts
+                            </span>
+                        </div>
+                        
+                        <button class="btn btn-primary btn-sm btn-start w-100 start-challenge"
+                                data-bs-toggle="modal" 
+                                data-bs-target="#challengeModal"
+                                data-id="8"
+                                data-name="Tree Planter Mode"
+                                data-desc="Plant one tree"
+                                data-co2="2.0"
+                                data-points="50">
+                            Start Challenge
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Challenge 9 -->
+            <div class="col-md-6 col-lg-4 mb-4 challenge-item">
+                <div class="card challenge-card">
+                    <div class="card-body position-relative">
+                        <span class="badge category-badge food">
+                            Food
+                        </span>
+                        
+                        <h5 class="challenge-title">Moo-Free Week</h5>
+                        
+                        <div class="d-flex justify-content-between mb-3">
+                            <span class="badge co2-badge p-2">
+                                <i class="fas fa-leaf stats-icon"></i>
+                                1.4 kg CO₂ saved
+                            </span>
+                            <span class="badge points-badge p-2">
+                                <i class="fas fa-star stats-icon"></i>
+                                35 pts
+                            </span>
+                        </div>
+                        
+                        <button class="btn btn-primary btn-sm btn-start w-100 start-challenge"
+                                data-bs-toggle="modal" 
+                                data-bs-target="#challengeModal"
+                                data-id="9"
+                                data-name="Moo-Free Week"
+                                data-desc="Use plant-based milk for a week"
+                                data-co2="1.4"
+                                data-points="35">
+                            Start Challenge
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Challenge 10 -->
+            <div class="col-md-6 col-lg-4 mb-4 challenge-item">
+                <div class="card challenge-card">
+                    <div class="card-body position-relative">
+                        <span class="badge category-badge community">
+                            Community
+                        </span>
+                        
+                        <h5 class="challenge-title">Share the Spare</h5>
+                        
+                        <div class="d-flex justify-content-between mb-3">
+                            <span class="badge co2-badge p-2">
+                                <i class="fas fa-leaf stats-icon"></i>
+                                0.5 kg CO₂ saved
+                            </span>
+                            <span class="badge points-badge p-2">
+                                <i class="fas fa-star stats-icon"></i>
+                                12 pts
+                            </span>
+                        </div>
+                        
+                        <button class="btn btn-primary btn-sm btn-start w-100 start-challenge"
+                                data-bs-toggle="modal" 
+                                data-bs-target="#challengeModal"
+                                data-id="10"
+                                data-name="Share the Spare"
+                                data-desc="Donate leftover or extra food"
+                                data-co2="0.5"
+                                data-points="12">
+                            Start Challenge
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Challenge 11 -->
+            <div class="col-md-6 col-lg-4 mb-4 challenge-item">
+                <div class="card challenge-card">
+                    <div class="card-body position-relative">
+                        <span class="badge category-badge waste">
+                            Waste
+                        </span>
+                        
+                        <h5 class="challenge-title">Cleanup Crusader</h5>
+                        
+                        <div class="d-flex justify-content-between mb-3">
+                            <span class="badge co2-badge p-2">
+                                <i class="fas fa-leaf stats-icon"></i>
+                                1.0 kg CO₂ saved
+                            </span>
+                            <span class="badge points-badge p-2">
+                                <i class="fas fa-star stats-icon"></i>
+                                25 pts
+                            </span>
+                        </div>
+                        
+                        <button class="btn btn-primary btn-sm btn-start w-100 start-challenge"
+                                data-bs-toggle="modal" 
+                                data-bs-target="#challengeModal"
+                                data-id="11"
+                                data-name="Cleanup Crusader"
+                                data-desc="Join a locality/street cleanup"
+                                data-co2="1.0"
+                                data-points="25">
+                            Start Challenge
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Challenge 12 -->
+            <div class="col-md-6 col-lg-4 mb-4 challenge-item">
+                <div class="card challenge-card">
+                    <div class="card-body position-relative">
+                        <span class="badge category-badge waste">
+                            Waste
+                        </span>
+                        
+                        <h5 class="challenge-title">Flip it & Fix it</h5>
+                        
+                        <div class="d-flex justify-content-between mb-3">
+                            <span class="badge co2-badge p-2">
+                                <i class="fas fa-leaf stats-icon"></i>
+                                0.8 kg CO₂ saved
+                            </span>
+                            <span class="badge points-badge p-2">
+                                <i class="fas fa-star stats-icon"></i>
+                                20 pts
+                            </span>
+                        </div>
+                        
+                        <button class="btn btn-primary btn-sm btn-start w-100 start-challenge"
+                                data-bs-toggle="modal" 
+                                data-bs-target="#challengeModal"
+                                data-id="12"
+                                data-name="Flip it & Fix it"
+                                data-desc="Upcycle/reuse something old"
+                                data-co2="0.8"
+                                data-points="20">
+                            Start Challenge
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Challenge 13 -->
+            <div class="col-md-6 col-lg-4 mb-4 challenge-item">
+                <div class="card challenge-card">
+                    <div class="card-body position-relative">
+                        <span class="badge category-badge waste">
+                            Waste
+                        </span>
+                        
+                        <h5 class="challenge-title">Compost Kickoff</h5>
+                        
+                        <div class="d-flex justify-content-between mb-3">
+                            <span class="badge co2-badge p-2">
+                                <i class="fas fa-leaf stats-icon"></i>
+                                2.5 kg CO₂ saved
+                            </span>
+                            <span class="badge points-badge p-2">
+                                <i class="fas fa-star stats-icon"></i>
+                                63 pts
+                            </span>
+                        </div>
+                        
+                        <button class="btn btn-primary btn-sm btn-start w-100 start-challenge"
+                                data-bs-toggle="modal" 
+                                data-bs-target="#challengeModal"
+                                data-id="13"
+                                data-name="Compost Kickoff"
+                                data-desc="Start a compost bin"
+                                data-co2="2.5"
+                                data-points="63">
+                            Start Challenge
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Challenge 14 -->
+            <div class="col-md-6 col-lg-4 mb-4 challenge-item">
+                <div class="card challenge-card">
+                    <div class="card-body position-relative">
+                        <span class="badge category-badge waste">
+                            Waste
+                        </span>
+                        
+                        <h5 class="challenge-title">Plastic-Free for a Day</h5>
+                        
+                        <div class="d-flex justify-content-between mb-3">
+                            <span class="badge co2-badge p-2">
+                                <i class="fas fa-leaf stats-icon"></i>
+                                0.3 kg CO₂ saved
+                            </span>
+                            <span class="badge points-badge p-2">
+                                <i class="fas fa-star stats-icon"></i>
+                                8 pts
+                            </span>
+                        </div>
+                        
+                        <button class="btn btn-primary btn-sm btn-start w-100 start-challenge"
+                                data-bs-toggle="modal" 
+                                data-bs-target="#challengeModal"
+                                data-id="14"
+                                data-name="Plastic-Free for a Day"
+                                data-desc="Avoid single-use plastics for one day"
+                                data-co2="0.3"
+                                data-points="8">
+                            Start Challenge
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Challenge 15 -->
+            <div class="col-md-6 col-lg-4 mb-4 challenge-item">
+                <div class="card challenge-card">
+                    <div class="card-body position-relative">
+                        <span class="badge category-badge food">
+                            Food
+                        </span>
+                        
+                        <h5 class="challenge-title">No Packaged Junk Day</h5>
+                        
+                        <div class="d-flex justify-content-between mb-3">
+                            <span class="badge co2-badge p-2">
+                                <i class="fas fa-leaf stats-icon"></i>
+                                0.7 kg CO₂ saved
+                            </span>
+                            <span class="badge points-badge p-2">
+                                <i class="fas fa-star stats-icon"></i>
+                                18 pts
+                            </span>
+                        </div>
+                        
+                        <button class="btn btn-primary btn-sm btn-start w-100 start-challenge"
+                                data-bs-toggle="modal" 
+                                data-bs-target="#challengeModal"
+                                data-id="15"
+                                data-name="No Packaged Junk Day"
+                                data-desc="Avoid packaged/processed food for a day"
+                                data-co2="0.7"
+                                data-points="18">
+                            Start Challenge
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Challenge 16 -->
+            <div class="col-md-6 col-lg-4 mb-4 challenge-item">
+                <div class="card challenge-card">
+                    <div class="card-body position-relative">
+                        <span class="badge category-badge travel">
+                            Travel
+                        </span>
+                        
+                        <h5 class="challenge-title">No Vehicle Day</h5>
+                        
+                        <div class="d-flex justify-content-between mb-3">
+                            <span class="badge co2-badge p-2">
+                                <i class="fas fa-leaf stats-icon"></i>
+                                2.5 kg CO₂ saved
+                            </span>
+                            <span class="badge points-badge p-2">
+                                <i class="fas fa-star stats-icon"></i>
+                                63 pts
+                            </span>
+                        </div>
+                        
+                        <button class="btn btn-primary btn-sm btn-start w-100 start-challenge"
+                                data-bs-toggle="modal" 
+                                data-bs-target="#challengeModal"
+                                data-id="16"
+                                data-name="No Vehicle Day"
+                                data-desc="Don't use any vehicle for a day"
+                                data-co2="2.5"
+                                data-points="63">
+                            Start Challenge
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Challenge 17 -->
+            <div class="col-md-6 col-lg-4 mb-4 challenge-item">
+                <div class="card challenge-card">
+                    <div class="card-body position-relative">
+                        <span class="badge category-badge energy">
+                            Energy
+                        </span>
+                        
+                        <h5 class="challenge-title">Sunlight Saver</h5>
+                        
+                        <div class="d-flex justify-content-between mb-3">
+                            <span class="badge co2-badge p-2">
+                                <i class="fas fa-leaf stats-icon"></i>
+                                0.4 kg CO₂ saved
+                            </span>
+                            <span class="badge points-badge p-2">
+                                <i class="fas fa-star stats-icon"></i>
+                                10 pts
+                            </span>
+                        </div>
+                        
+                        <button class="btn btn-primary btn-sm btn-start w-100 start-challenge"
+                                data-bs-toggle="modal" 
+                                data-bs-target="#challengeModal"
+                                data-id="17"
+                                data-name="Sunlight Saver"
+                                data-desc="Use natural light till noon"
+                                data-co2="0.4"
+                                data-points="10">
+                            Start Challenge
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Challenge 18 -->
+            <div class="col-md-6 col-lg-4 mb-4 challenge-item">
+                <div class="card challenge-card">
+                    <div class="card-body position-relative">
+                        <span class="badge category-badge waste">
+                            Waste
+                        </span>
+                        
+                        <h5 class="challenge-title">Take the Stairs, Skip the Lift</h5>
+                        
+                        <div class="d-flex justify-content-between mb-3">
+                            <span class="badge co2-badge p-2">
+                                <i class="fas fa-leaf stats-icon"></i>
+                                0.15 kg CO₂ saved
+                            </span>
+                            <span class="badge points-badge p-2">
+                                <i class="fas fa-star stats-icon"></i>
+                                4 pts
+                            </span>
+                        </div>
+                        
+                        <button class="btn btn-primary btn-sm btn-start w-100 start-challenge"
+                                data-bs-toggle="modal" 
+                                data-bs-target="#challengeModal"
+                                data-id="18"
+                                data-name="Take the Stairs, Skip the Lift"
+                                data-desc="Use stairs instead of elevator"
+                                data-co2="0.15"
+                                data-points="4">
+                            Start Challenge
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Challenge Details Modal -->
+    <div class="modal fade" id="challengeModal" tabindex="-1" aria-labelledby="challengeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="challengeModalLabel">Challenge Details</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h4 id="modalChallengeName" class="mb-0"></h4>
+                        <span id="modalChallengeCategory" class="badge"></span>
+                    </div>
+                    
+                    <div class="alert alert-info mt-3">
+                        <i class="fas fa-info-circle me-2"></i>
+                        <span id="modalChallengeDesc"></span>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between mt-4">
+                        <span class="badge co2-badge p-3">
+                            <i class="fas fa-leaf stats-icon"></i> 
+                            Saves <span id="modalCo2Saved"></span> kg CO₂
+                        </span>
+                        <span class="badge bg-secondary p-3">
+                            <i class="fas fa-star stats-icon"></i> 
+                            <span id="modalPoints"></span> points
+                        </span>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-success btn-complete" id="completeChallengeBtn">
+                        <i class="fas fa-check-circle me-2"></i> Complete Challenge
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Toast -->
+    <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+        <div id="successToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header bg-success text-white">
+                <strong class="me-auto">Success!</strong>
+            </div>
+            <div class="toast-body">
+                <i class="fas fa-check-circle me-2"></i>
+                <span id="toastMessage">Challenge completed successfully!</span>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            let currentChallenge = null;
+            
+            // When start challenge button is clicked
+            $('.start-challenge').click(function() {
+                const id = $(this).data('id');
+                const name = $(this).data('name');
+                const desc = $(this).data('desc');
+                const co2 = $(this).data('co2');
+                const points = $(this).data('points');
+                
+                $('#modalChallengeName').text(name);
+                $('#modalChallengeDesc').text(desc);
+                $('#modalCo2Saved').text(co2 + ' kg');
+                $('#modalPoints').text(points);
+                
+                currentChallenge = {
+                    id: id,
+                    name: name,
+                    points: points,
+                    co2: co2
+                };
+            });
+            
+            // When complete challenge button is clicked
+            $('#completeChallengeBtn').click(function() {
+                if (!currentChallenge) return;
+                
+                completeChallenge(currentChallenge.id, currentChallenge.points);
+            });
+
+            function completeChallenge(challengeId, points) {
+                fetch('/complete_challenge', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        challenge_id: challengeId,
+                        points: points
+                    })
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.success) {
+                        // Show points earned notification
+                        showNotification(`You earned ${points} points!`, 'success');
+                        
+                        // Update points display
+                        fetch('/get_total_points')
+                            .then(response => response.json())
+                            .then(pointsData => {
+                                if (pointsData.success) {
+                                    updatePointsDisplay(pointsData.total_points);
+                                    updateTreeProgress(pointsData.total_points);
+                                }
+                            });
+                        
+                        // Update challenge button
+                        const challengeElement = document.getElementById(`challenge-${challengeId}`);
+                        if (challengeElement) {
+                            challengeElement.classList.add('completed');
+                            const button = challengeElement.querySelector('button');
+                            if (button) {
+                                button.disabled = true;
+                                button.textContent = 'Completed ✓';
+                            }
+                        }
+                        
+                        // Check for tree achievement
+                        checkTreeAchievement();
+                    } else {
+                        showNotification(data.message || 'Error completing challenge', 'error');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    showNotification('Error completing challenge', 'error');
+                });
+            }
+
+            function checkTreeAchievement() {
+                fetch('/check_tree_achievement', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({})
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.success && data.new_trees > 0) {
+                        showNotification(`Congratulations! ${data.new_trees} new tree(s) will be planted!`, 'achievement');
+                        updateTreeCount(data.total_trees);
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+            }
+
+            function updateTreeCount(trees) {
+                const treeCount = document.getElementById('tree-count');
+                if (treeCount) {
+                    treeCount.textContent = trees;
+                }
+            }
+
+            function updatePointsDisplay(points) {
+                const pointsDisplay = document.getElementById('total-points');
+                if (pointsDisplay) {
+                    // Animate points counter
+                    const currentPoints = parseInt(pointsDisplay.textContent);
+                    animateValue(pointsDisplay, currentPoints, points, 1000);
+                }
+            }
+
+            function animateValue(obj, start, end, duration) {
+                let startTimestamp = null;
+                const step = (timestamp) => {
+                    if (!startTimestamp) startTimestamp = timestamp;
+                    const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                    obj.textContent = Math.floor(progress * (end - start) + start);
+                    if (progress < 1) {
+                        window.requestAnimationFrame(step);
+                    }
+                };
+                window.requestAnimationFrame(step);
+            }
+
+            function updateTreeProgress(points) {
+                const pointsToNextTree = 50 - (points % 50);
+                const progress = ((50 - pointsToNextTree) / 50) * 100;
+                
+                const progressBar = document.getElementById('tree-progress');
+                const pointsDisplay = document.getElementById('points-to-next-tree');
+                
+                if (progressBar) {
+                    progressBar.style.width = `${progress}%`;
+                }
+                
+                if (pointsDisplay) {
+                    pointsDisplay.textContent = pointsToNextTree;
+                }
+            }
+
+            function showNotification(message, type = 'success') {
+                const notificationArea = document.getElementById('notification-area');
+                const notification = document.createElement('div');
+                notification.className = `notification ${type}`;
+                notification.innerHTML = `
+                    <span>${message}</span>
+                    <span class="close-btn" onclick="this.parentElement.remove()">×</span>
+                `;
+                
+                notificationArea.insertBefore(notification, notificationArea.firstChild);
+                
+                // Remove notification after 5 seconds
+                setTimeout(() => {
+                    notification.style.opacity = '0';
+                    setTimeout(() => notification.remove(), 300);
+                }, 5000);
+            }
+        });
+    </script>
+</body>
+</html>

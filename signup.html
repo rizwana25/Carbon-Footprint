@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Carbon Footprint Calculator - Sign Up</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @keyframes leaf-float {
+      0%, 100% { transform: translateY(0) rotate(-5deg); }
+      50% { transform: translateY(-10px) rotate(5deg); }
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-20px); }
+    }
+
+    .carbon-input {
+      @apply w-full px-4 py-3 rounded-xl border-2 border-[#98fb98] focus:border-[#2e8b57]
+             focus:ring-2 focus:ring-[#3cb371]/30 bg-white/50 transition-all;
+    }
+
+    .auth-transition {
+      @apply transition-all duration-300 ease-out;
+    }
+
+    /* Animated background elements */
+    .bg-leaf {
+      position: absolute;
+      opacity: 0.1;
+      z-index: 0;
+      animation: float 15s ease-in-out infinite;
+    }
+
+    .bg-leaf-1 {
+      top: 15%;
+      left: 15%;
+      font-size: 8rem;
+      color: #2e8b57;
+      animation-delay: 0s;
+    }
+
+    .bg-leaf-2 {
+      bottom: 20%;
+      right: 15%;
+      font-size: 10rem;
+      color: #3cb371;
+      animation-delay: 3s;
+    }
+
+    .bg-leaf-3 {
+      top: 60%;
+      left: 25%;
+      font-size: 12rem;
+      color: #98fb98;
+      animation-delay: 6s;
+    }
+
+    .card-container {
+      position: relative;
+      z-index: 10;
+    }
+
+    /* Message styles */
+    .message {
+      padding: 0.75rem;
+      border-radius: 0.75rem;
+      margin-top: 1rem;
+      display: none;
+    }
+    .error {
+      background-color: #FEE2E2;
+      color: #EF4444;
+      border: 1px solid #FECACA;
+    }
+    .success {
+      background-color: #D1FAE5;
+      color: #10B981;
+      border: 1px solid #A7F3D0;
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-br from-[#e6f2ed] to-[#c1dacc] min-h-screen flex items-center justify-center overflow-hidden">
+  <!-- Animated background leaves -->
+  <i class="fas fa-leaf bg-leaf bg-leaf-1"></i>
+  <i class="fas fa-seedling bg-leaf bg-leaf-2"></i>
+  <i class="fas fa-spa bg-leaf bg-leaf-3"></i>
+
+  <!-- Card Container -->
+  <div class="card-container w-full max-w-md bg-white/80 backdrop-blur-lg rounded-3xl shadow-2xl p-8 space-y-6">
+    <!-- Header Section -->
+    <div class="text-center space-y-4">
+      <div class="inline-flex p-4 bg-white rounded-full shadow-lg">
+        <i class="fas fa-seedling text-4xl text-[#3cb371] animate-leaf-float"></i>
+      </div>
+      <h1 class="text-3xl font-bold bg-gradient-to-r from-[#2e8b57] to-[#3cb371] bg-clip-text text-transparent">
+        Create Your Account
+      </h1>
+      <p class="text-sm text-[#2e8b57]/80">Join CarbonTrack Today</p>
+    </div>
+
+    <!-- Signup Form -->
+    <form id="signupForm" class="space-y-4">
+      <div>
+        <label class="text-sm font-medium text-[#2e8b57]/80 mb-1 block">
+          <i class="fas fa-envelope text-[#3cb371] mr-2"></i>Email
+        </label>
+        <input
+          id="email"
+          type="email"
+          placeholder="your@email.com"
+          class="carbon-input"
+          required
+        />
+      </div>
+
+      <div class="space-y-2">
+        <label class="text-sm font-medium text-[#2e8b57]/80 mb-1 block">
+          <i class="fas fa-lock text-[#3cb371] mr-2"></i>Password
+        </label>
+        <input
+          id="password"
+          type="password"
+          placeholder="At least 6 characters"
+          class="carbon-input"
+          required
+          minlength="6"
+        />
+        <p class="text-sm text-[#2e8b57]/80">
+          <i class="fas fa-info-circle mr-1"></i>Password must be at least 6 characters
+        </p>
+      </div>
+
+      <button type="submit" 
+              class="w-full bg-gradient-to-r from-[#2e8b57] to-[#3cb371] hover:from-[#3cb371] hover:to-[#98fb98] 
+                     text-white py-3 px-6 rounded-xl font-semibold auth-transition flex items-center justify-center gap-2">
+        <i class="fas fa-user-plus"></i>
+        Sign Up
+      </button>
+    </form>
+
+    <!-- OTP Section -->
+    <div id="otpSection" class="space-y-4" style="display: none;">
+      <div>
+        <label class="text-sm font-medium text-[#2e8b57]/80 mb-1 block">
+          <i class="fas fa-key text-[#3cb371] mr-2"></i>Verification Code
+        </label>
+        <input
+          id="otp"
+          type="text"
+          placeholder="6-digit code"
+          maxlength="6"
+          class="carbon-input"
+        />
+      </div>
+
+      <button id="verifyBtn"
+              class="w-full bg-gradient-to-r from-[#2e8b57] to-[#3cb371] hover:from-[#3cb371] hover:to-[#98fb98] 
+                     text-white py-3 px-6 rounded-xl font-semibold auth-transition flex items-center justify-center gap-2">
+        <i class="fas fa-check-circle"></i>
+        Verify Account
+      </button>
+
+      <p id="resendText" class="text-center text-sm text-[#2e8b57]/80">
+        Didn't receive code? 
+        <a href="#" id="resendLink" class="font-semibold text-[#2e8b57] hover:text-[#3cb371] auth-transition">
+          Resend <i class="fas fa-redo ml-1"></i>
+        </a>
+      </p>
+    </div>
+
+    <!-- Message div -->
+    <div id="message" class="message"></div>
+
+    <!-- Login link -->
+    <p class="text-center text-sm text-[#2e8b57]/80">
+      Already have an account? 
+      <a href="/login.html" class="font-semibold text-[#2e8b57] hover:text-[#3cb371] auth-transition">
+        Log in <i class="fas fa-sign-in-alt ml-1"></i>
+      </a>
+    </p>
+  </div>
+
+  <!-- Original JavaScript - kept EXACTLY THE SAME -->
+  <script>
+    // DOM Elements
+    const signupForm = document.getElementById('signupForm');
+    const otpSection = document.getElementById('otpSection');
+    const verifyBtn = document.getElementById('verifyBtn');
+    const resendLink = document.getElementById('resendLink');
+    const messageDiv = document.getElementById('message');
+    
+    // Store email for verification
+    let userEmail = '';
+
+    // Handle signup form submission
+    signupForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value.trim();
+      
+      // Basic validation
+      if (!email || !password) {
+        showMessage('Please fill in all fields', 'error');
+        return;
+      }
+      
+      if (password.length < 6) {
+        showMessage('Password must be at least 6 characters', 'error');
+        return;
+      }
+      
+      try {
+        const response = await fetch('/api/signup', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            email: email,
+            password: password
+          })
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok) {
+          userEmail = email;
+          signupForm.style.display = 'none';
+          otpSection.style.display = 'block';
+          showMessage('Verification code sent to your email', 'success');
+        } else {
+          showMessage(data.message || 'Signup failed', 'error');
+        }
+      } catch (error) {
+        showMessage('Network error. Please try again.', 'error');
+        console.error('Signup error:', error);
+      }
+    });
+    
+    // Handle OTP verification
+    verifyBtn.addEventListener('click', async () => {
+      const otp = document.getElementById('otp').value.trim();
+      
+      if (!otp || otp.length !== 6) {
+        showMessage('Please enter a valid 6-digit code', 'error');
+        return;
+      }
+      
+      try {
+        const response = await fetch('/api/verify', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            email: userEmail,
+            otp: otp
+          })
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok) {
+          showMessage('Account verified successfully! Redirecting...', 'success');
+          setTimeout(() => {
+            window.location.href = '/details.html';
+          }, 1500);
+        } else {
+          showMessage(data.message || 'Verification failed', 'error');
+        }
+      } catch (error) {
+        showMessage('Network error. Please try again.', 'error');
+        console.error('Verification error:', error);
+      }
+    });
+    
+    // Handle OTP resend
+    resendLink.addEventListener('click', async (e) => {
+      e.preventDefault();
+      
+      if (!userEmail) {
+        showMessage('No email found for resend', 'error');
+        return;
+      }
+      
+      try {
+        const response = await fetch('/resend-otp', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            email: userEmail
+          })
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok) {
+          showMessage('New verification code sent', 'success');
+        } else {
+          showMessage(data.message || 'Failed to resend code', 'error');
+        }
+      } catch (error) {
+        showMessage('Network error. Please try again.', 'error');
+        console.error('Resend error:', error);
+      }
+    });
+    
+    // Helper function to show messages
+    function showMessage(message, type) {
+      messageDiv.textContent = message;
+      messageDiv.className = 'message ' + type;
+      messageDiv.style.display = 'block';
+      
+      // Auto-hide after 5 seconds
+      setTimeout(() => {
+        messageDiv.style.display = 'none';
+      }, 5000);
+    }
+  </script>
+</body>
+</html>

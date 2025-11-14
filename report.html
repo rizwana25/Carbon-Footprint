@@ -1,0 +1,995 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carbon Footprint Report</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #e6f2ed, #c1dacc);
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1, h2, h3 {
+            color: #2e8b57;
+            font-weight: 600;
+        }
+
+        .section {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 8px 32px rgba(46, 139, 87, 0.1);
+        }
+
+        .chart-container {
+            position: relative;
+            height: 400px;
+            margin: 20px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin: 15px 0;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid rgba(46, 139, 87, 0.1);
+        }
+
+        th {
+            background: linear-gradient(135deg, #2e8b57, #3cb371);
+            color: white;
+            font-weight: 600;
+        }
+
+        tr:hover {
+            background-color: rgba(46, 139, 87, 0.05);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #2e8b57, #3cb371);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            text-decoration: none;
+        }
+
+        .btn:hover {
+            background: linear-gradient(135deg, #3cb371, #2e8b57);
+        }
+
+        .tab-buttons {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 2px solid rgba(46, 139, 87, 0.1);
+        }
+
+        .tab-btn {
+            padding: 10px 20px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .tab-btn.active {
+            border-bottom: 3px solid #2e8b57;
+            color: #2e8b57;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .summary-card {
+            display: flex;
+            justify-content: space-between;
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .summary-item {
+            text-align: center;
+            flex: 1;
+            padding: 0 15px;
+            border-right: 1px solid rgba(46, 139, 87, 0.1);
+        }
+
+        .summary-item:last-child {
+            border-right: none;
+        }
+
+        .summary-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2e8b57;
+        }
+
+        .summary-label {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .comparison-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-left: 8px;
+        }
+
+        .badge-up {
+            background-color: #ff6b6b;
+            color: white;
+        }
+
+        .badge-down {
+            background-color: #2ecc71;
+            color: white;
+        }
+
+        .badge-neutral {
+            background-color: #95a5a6;
+            color: white;
+        }
+
+        .ai-tips {
+            background: rgba(46, 139, 87, 0.05);
+            border-left: 4px solid #2e8b57;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 0 5px 5px 0;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(46, 139, 87, 0.1);
+            border-radius: 50%;
+            border-top-color: #2e8b57;
+            animation: spin 1s ease-in-out infinite;
+            margin-left: 10px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Navigation styles */
+        nav {
+            background: linear-gradient(135deg, #2e8b57, #3cb371);
+            padding: 15px 0;
+            margin-bottom: 30px;
+            border-radius: 8px;
+        }
+
+        nav div {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: background-color 0.3s;
+        }
+
+        nav a:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
+            .summary-card {
+                flex-direction: column;
+            }
+
+            .summary-item {
+                border-right: none;
+                border-bottom: 1px solid rgba(46, 139, 87, 0.1);
+                padding: 15px 0;
+            }
+
+            .summary-item:last-child {
+                border-bottom: none;
+            }
+
+            .tab-buttons {
+                flex-wrap: wrap;
+            }
+
+            nav div {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav style="background-color: #2c3e50; padding: 15px 0; margin-bottom: 30px; border-radius: 8px;">
+        <div style="max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 0 20px;">
+            <a href="/main.html" style="color: white; text-decoration: none; font-size: 18px; font-weight: bold;">
+                <i class="fas fa-home"></i> Back to Main
+            </a>
+            <div style="display: flex; gap: 20px;">
+                <a href="/profile.html" style="color: white; text-decoration: none;">
+                    <i class="fas fa-user"></i> Profile
+                </a>
+                <a href="/community.html" style="color: white; text-decoration: none;">
+                    <i class="fas fa-users"></i> Community
+                </a>
+                <a href="#" onclick="logout(); return false;" style="color: white; text-decoration: none;">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <h1>Carbon Footprint Report</h1>
+    
+    <!-- Summary Cards -->
+    <div class="summary-card">
+        <div class="summary-item">
+            <div class="summary-value" id="todayTotal">--</div>
+            <div class="summary-label">Today's Total</div>
+        </div>
+        <div class="summary-item">
+            <div class="summary-value" id="weeklyAvg">--</div>
+            <div class="summary-label">Weekly Average</div>
+        </div>
+        <div class="summary-item">
+            <div class="summary-value" id="monthlyTotal">--</div>
+            <div class="summary-label">Monthly Total</div>
+        </div>
+        <div class="summary-item">
+            <div class="summary-value" id="comparison">--</div>
+            <div class="summary-label">vs. Last Week</div>
+        </div>
+    </div>
+
+    <!-- Weekly Bar Chart -->
+    <div class="section">
+        <h2>Weekly Carbon Footprint</h2>
+        <div class="chart-container">
+            <canvas id="weeklyChart"></canvas>
+        </div>
+    </div>
+
+    <!-- Daily Activity -->
+    <div class="section">
+        <h2>Daily Activity Breakdown</h2>
+        
+        <div class="tab-buttons">
+            <button class="tab-btn active" data-tab="energy">Energy</button>
+            <button class="tab-btn" data-tab="travel">Travel</button>
+            <button class="tab-btn" data-tab="waste">Waste</button>
+        </div>
+        
+        <div class="tab-content active" id="energy-tab">
+            <table id="energyTable">
+                <thead>
+                    <tr>
+                        <th>Device</th>
+                        <th>Hours Used</th>
+                        <th>Carbon Emission (kg CO₂)</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+        
+        <div class="tab-content" id="travel-tab">
+            <table id="travelTable">
+                <thead>
+                    <tr>
+                        <th>Vehicle</th>
+                        <th>Distance (km)</th>
+                        <th>Carbon Emission (kg CO₂)</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+        
+        <div class="tab-content" id="waste-tab">
+            <table id="wasteTable">
+                <thead>
+                    <tr>
+                        <th>Waste Type</th>
+                        <th>Category</th>
+                        <th>Quantity (kg)</th>
+                        <th>Carbon Emission (kg CO₂)</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Monthly Report -->
+    <div class="section">
+        <h2>Monthly Report</h2>
+        
+        <div class="tab-buttons">
+            <button class="tab-btn active" data-tab="category">By Category</button>
+            <button class="tab-btn" data-tab="item">By Item</button>
+        </div>
+        
+        <div class="tab-content active" id="category-tab">
+            <div class="chart-container">
+                <canvas id="categoryChart"></canvas>
+            </div>
+        </div>
+        
+        <div class="tab-content" id="item-tab">
+            <div class="chart-container">
+                <canvas id="itemChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- AI Tips -->
+    <div class="section">
+        <h2>Personalized Recommendations</h2>
+        <button id="generateTipsBtn" class="btn btn-success">
+            Generate Tips <span id="loadingIcon" class="loading" style="display: none;"></span>
+        </button>
+        <div id="aiTipsContainer" class="ai-tips" style="display: none;"></div>
+    </div>
+
+    <script>
+        // Global variables
+        let weeklyChart, categoryChart, itemChart;
+        let todayTotal = 0;
+        
+        // DOM Content Loaded
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Load all data
+            await loadSummaryData();
+            await loadWeeklyChart();
+            await loadDailyActivity();
+            await loadMonthlyCharts();
+            
+            // Set up tab functionality
+            setupTabs();
+            
+            // Set up tips button
+            document.getElementById('generateTipsBtn').addEventListener('click', generateTips);
+        });
+
+        // Tab functionality
+        function setupTabs() {
+            const tabBtns = document.querySelectorAll('.tab-btn');
+            
+            tabBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    // Get tab group (either daily activity or monthly report)
+                    const tabGroup = btn.closest('.tab-buttons').parentElement;
+                    
+                    // Remove active class from all buttons in this group
+                    tabGroup.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                    
+                    // Add active class to clicked button
+                    btn.classList.add('active');
+                    
+                    // Hide all tab contents in this group
+                    tabGroup.querySelectorAll('.tab-content').forEach(content => {
+                        content.classList.remove('active');
+                    });
+                    
+                    // Show the selected tab content
+                    const tabId = btn.getAttribute('data-tab');
+                    document.getElementById(`${tabId}-tab`).classList.add('active');
+                });
+            });
+        }
+
+        // Load summary data
+        async function loadSummaryData() {
+            try {
+                const response = await fetch('/get_summary_data');
+                if (!response.ok) {
+                    throw new Error('Failed to fetch summary data');
+                }
+                
+                const data = await response.json();
+                
+                if (!data || typeof data.today !== 'number' || typeof data.weekly_avg !== 'number' || typeof data.monthly !== 'number') {
+                    throw new Error('Invalid data format received');
+                }
+                
+                // Update summary cards
+                const todayTotalElem = document.getElementById('todayTotal');
+                const weeklyAvgElem = document.getElementById('weeklyAvg');
+                const monthlyTotalElem = document.getElementById('monthlyTotal');
+                const comparisonElem = document.getElementById('comparison');
+                
+                todayTotalElem.textContent = data.today.toFixed(2);
+                weeklyAvgElem.textContent = data.weekly_avg.toFixed(2);
+                monthlyTotalElem.textContent = data.monthly.toFixed(2);
+                
+                // Update comparison
+                comparisonElem.textContent = `${Math.abs(data.comparison)}%`;
+                
+                // Add badge based on comparison
+                const badge = document.createElement('span');
+                badge.className = 'comparison-badge';
+                
+                if (data.comparison > 0) {
+                    badge.classList.add('badge-up');
+                    badge.innerHTML = `<i class="fas fa-arrow-up"></i> Higher`;
+                } else if (data.comparison < 0) {
+                    badge.classList.add('badge-down');
+                    badge.innerHTML = `<i class="fas fa-arrow-down"></i> Lower`;
+                } else {
+                    badge.classList.add('badge-neutral');
+                    badge.textContent = 'Same';
+                }
+                
+                comparisonElem.appendChild(badge);
+                
+                // Store today's total for later use
+                todayTotal = data.today;
+                
+            } catch (error) {
+                console.error('Error loading summary data:', error);
+                // Show error in summary cards
+                ['todayTotal', 'weeklyAvg', 'monthlyTotal', 'comparison'].forEach(id => {
+                    const elem = document.getElementById(id);
+                    elem.innerHTML = `<span class="error-text" style="color: #e74c3c; font-size: 16px;">
+                        <i class="fas fa-exclamation-circle"></i> Error
+                    </span>`;
+                });
+                
+                // Add error message to the summary card
+                const summaryCard = document.querySelector('.summary-card');
+                const errorMsg = document.createElement('div');
+                errorMsg.className = 'error-message';
+                errorMsg.style.cssText = 'color: #e74c3c; text-align: center; width: 100%; margin-top: 10px; padding: 10px; background: #fdf0ed; border-radius: 4px;';
+                errorMsg.innerHTML = `
+                    <i class="fas fa-exclamation-triangle"></i>
+                    Failed to load summary data. Please try refreshing the page.
+                `;
+                summaryCard.appendChild(errorMsg);
+            }
+        }
+
+        async function loadWeeklyChart() {
+            try {
+                console.log("Loading weekly chart data...");
+                
+                const response = await fetch('/get_weekly_data');
+                if (!response.ok) {
+                    throw new Error(`Failed to fetch weekly data: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                console.log("API response:", data);
+
+                if (!data || !data.success) {
+                    throw new Error(data.error || "Failed to load weekly data");
+                }
+
+                // Validate data format
+                if (!Array.isArray(data.data) || !Array.isArray(data.labels)) {
+                    throw new Error("Invalid data format received from server");
+                }
+
+                const ctx = document.getElementById('weeklyChart');
+                if (!ctx) {
+                    throw new Error("Chart canvas element not found");
+                }
+
+                // Destroy previous chart if exists
+                if (window.weeklyChart instanceof Chart) {
+                    window.weeklyChart.destroy();
+                }
+
+                // Use provided data or fallback to defaults
+                const labels = data.labels.length > 0 ? data.labels : ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+                const chartData = data.data.length > 0 ? data.data : [0, 0, 0, 0, 0, 0, 0];
+
+                window.weeklyChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Daily Carbon Footprint (kg CO₂)',
+                            data: chartData,
+                            backgroundColor: 'rgba(46, 139, 87, 0.7)',
+                            borderColor: 'rgba(46, 139, 87, 1)',
+                            borderWidth: 2,
+                            borderRadius: 4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: false
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: (context) => `${context.dataset.label}: ${context.raw.toFixed(2)} kg`
+                                }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
+                                    text: 'kg CO₂',
+                                    font: {
+                                        weight: 'bold'
+                                    },
+                                    color: '#2e8b57'
+                                },
+                                ticks: {
+                                    color: '#2e8b57'
+                                },
+                                grid: {
+                                    color: 'rgba(46, 139, 87, 0.1)'
+                                }
+                            },
+                            x: {
+                                grid: {
+                                    display: false
+                                },
+                                title: {
+                                    display: true,
+                                    text: 'Day of Week',
+                                    font: {
+                                        weight: 'bold'
+                                    },
+                                    color: '#2e8b57'
+                                },
+                                ticks: {
+                                    color: '#2e8b57'
+                                }
+                            }
+                        }
+                    }
+                });
+
+                console.log("Chart successfully rendered");
+
+            } catch (error) {
+                console.error("Chart error:", error);
+                const chartContainer = document.querySelector('.chart-container');
+                if (chartContainer) {
+                    chartContainer.innerHTML = `
+                        <div class="chart-error" style="text-align: center; padding: 20px; background: #fdf0ed; border-radius: 8px; color: #e74c3c;">
+                            <i class="fas fa-exclamation-triangle" style="font-size: 24px; margin-bottom: 10px;"></i>
+                            <p style="margin: 10px 0; font-weight: 500;">Could not load chart data</p>
+                            <small style="display: block; color: #666;">${error.message}</small>
+                            <button onclick="loadWeeklyChart()" class="btn" style="margin-top: 15px; background-color: #e74c3c;">
+                                <i class="fas fa-sync-alt"></i> Retry
+                            </button>
+                        </div>
+                    `;
+                }
+            }
+        }
+
+        async function loadDailyActivity() {
+            try {
+                console.log("Loading daily activity data...");
+                
+                // Clear all tables first
+                clearAllTables();
+                
+                // Load all data sequentially with error handling
+                await loadEnergyData();
+                await loadTravelData();
+                await loadWasteData();
+                
+            } catch (error) {
+                console.error("Failed to load daily activity:", error);
+                showErrorAllTables("Failed to load data. Please try again later.");
+            }
+        }
+
+        async function loadEnergyData() {
+            try {
+                const response = await fetch('/get_todays_energy');
+                if (!response.ok) throw new Error("Network response not OK");
+                
+                const result = await response.json();
+                console.log("Energy data:", result);
+                
+                if (!result.success) throw new Error(result.error || "Energy data unavailable");
+                
+                const energyData = result.data || [];
+                let totalEnergyEmission = 0;
+                
+                populateTable(
+                    'energyTable',
+                    energyData,
+                    row => {
+                        const emission = parseFloat(row.emission) || 0;
+                        totalEnergyEmission += emission;
+                        return `
+                            <td>${escapeHtml(row.device_name || 'Unknown')}</td>
+                            <td>${formatNumber(row.hours || 0, 1)}</td>
+                            <td>${formatNumber(emission, 2)}</td>
+                        `;
+                    }
+                );
+
+                // Update total energy emission if there's a total element
+                const totalElement = document.getElementById('totalEnergyEmission');
+                if (totalElement) {
+                    totalElement.textContent = formatNumber(totalEnergyEmission, 2);
+                }
+            } catch (error) {
+                console.error("Energy data error:", error);
+                showTableError('energyTable', 'Failed to load energy data');
+            }
+        }
+
+        async function loadTravelData() {
+            try {
+                const response = await fetch('/get_todays_travel');
+                if (!response.ok) throw new Error("Network response not OK");
+                
+                const result = await response.json();
+                console.log("Travel data:", result);
+                
+                if (!result.success) throw new Error(result.error || "Travel data unavailable");
+                
+                const travelData = result.data || [];
+                let totalTravelEmission = 0;
+                
+                populateTable(
+                    'travelTable',
+                    travelData,
+                    row => {
+                        const emission = parseFloat(row.emission) || 0;
+                        totalTravelEmission += emission;
+                        return `
+                            <td>${escapeHtml(row.name || 'Unknown')}</td>
+                            <td>${formatNumber(row.distance || 0, 1)}</td>
+                            <td>${formatNumber(emission, 2)}</td>
+                        `;
+                    }
+                );
+
+                // Update total travel emission if there's a total element
+                const totalElement = document.getElementById('totalTravelEmission');
+                if (totalElement) {
+                    totalElement.textContent = formatNumber(totalTravelEmission, 2);
+                }
+            } catch (error) {
+                console.error("Travel data error:", error);
+                showTableError('travelTable', 'Failed to load travel data');
+            }
+        }
+
+        async function loadWasteData() {
+            try {
+                const response = await fetch('/get_todays_wastee');
+                if (!response.ok) throw new Error("Network response not OK");
+                
+                const result = await response.json();
+                console.log("Waste data:", result);
+                
+                if (!result.success) throw new Error(result.error || "Waste data unavailable");
+                
+                const wasteData = result.data || [];
+                let totalWasteEmission = 0;
+                
+                populateTable(
+                    'wasteTable',
+                    wasteData,
+                    row => {
+                        const emission = parseFloat(row.emission) || 0;
+                        totalWasteEmission += emission;
+                        return `
+                            <td>${escapeHtml((row.type || '').replace('-', ' '))}</td>
+                            <td>${escapeHtml(row.category || 'General')}</td>
+                            <td>${formatNumber(row.quantity, 2)}</td>
+                            <td>${formatNumber(emission, 2)}</td>
+                        `;
+                    }
+                );
+
+                // Update total waste emission if there's a total element
+                const totalElement = document.getElementById('totalWasteEmission');
+                if (totalElement) {
+                    totalElement.textContent = formatNumber(totalWasteEmission, 2);
+                }
+            } catch (error) {
+                console.error("Waste data error:", error);
+                showTableError('wasteTable', 'Failed to load waste data');
+            }
+        }
+
+        // Utility functions
+        function clearAllTables() {
+            ['energyTable', 'travelTable', 'wasteTable'].forEach(tableId => {
+                const tbody = document.querySelector(`#${tableId} tbody`);
+                if (tbody) tbody.innerHTML = '';
+            });
+        }
+
+        function populateTable(tableId, data, rowFormatter) {
+            const tbody = document.querySelector(`#${tableId} tbody`);
+            tbody.innerHTML = '';
+            
+            if (!Array.isArray(data) || data.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="${tableId === 'wasteTable' ? 4 : 3}" class="no-data">No data available</td></tr>`;
+                return;
+            }
+            
+            data.forEach(row => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = rowFormatter(row);
+                tbody.appendChild(tr);
+            });
+        }
+
+        function showTableError(tableId, message) {
+            const tbody = document.querySelector(`#${tableId} tbody`);
+            tbody.innerHTML = `
+                <tr class="error-row">
+                    <td colspan="${tableId === 'wasteTable' ? 4 : 3}">
+                        <i class="fas fa-exclamation-circle"></i>
+                        ${escapeHtml(message)}
+                    </td>
+                </tr>
+            `;
+        }
+
+        function showErrorAllTables(message) {
+            document.querySelectorAll('.data-table tbody').forEach(tbody => {
+                const colCount = tbody.closest('table').querySelectorAll('th').length;
+                tbody.innerHTML = `
+                    <tr class="error-row">
+                        <td colspan="${colCount}">
+                            <i class="fas fa-exclamation-circle"></i>
+                            ${escapeHtml(message)}
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+
+        function formatNumber(value, decimals) {
+            if (typeof value !== 'number' || isNaN(value)) return '0.00';
+            return value.toFixed(decimals);
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Load monthly charts
+        async function loadMonthlyCharts() {
+            try {
+                // Category chart
+                const categoryRes = await fetch('/get_monthly_data?type=category');
+                if (!categoryRes.ok) throw new Error("Failed to fetch category data");
+                const categoryData = await categoryRes.json();
+                
+                if (categoryData && categoryData.labels && categoryData.values) {
+                    const categoryCtx = document.getElementById('categoryChart').getContext('2d');
+                    if (categoryChart) categoryChart.destroy();
+                    categoryChart = new Chart(categoryCtx, {
+                        type: 'pie',
+                        data: {
+                            labels: categoryData.labels,
+                            datasets: [{
+                                data: categoryData.values,
+                                backgroundColor: [
+                                    '#3498db', '#e74c3c', '#2ecc71', '#f39c12'
+                                ],
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    position: 'right',
+                                },
+                                tooltip: {
+                                    callbacks: {
+                                        label: function(context) {
+                                            const label = context.label || '';
+                                            const value = context.raw || 0;
+                                            const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                            const percentage = Math.round((value / total) * 100);
+                                            return `${label}: ${value.toFixed(2)} kg (${percentage}%)`;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    });
+                }
+                
+                // Item chart
+                const itemRes = await fetch('/get_monthly_data?type=item');
+                if (!itemRes.ok) throw new Error("Failed to fetch item data");
+                const itemData = await itemRes.json();
+                
+                if (itemData && itemData.labels && itemData.values) {
+                    const itemCtx = document.getElementById('itemChart').getContext('2d');
+                    if (itemChart) itemChart.destroy();
+                    itemChart = new Chart(itemCtx, {
+                        type: 'pie',
+                        data: {
+                            labels: itemData.labels,
+                            datasets: [{
+                                data: itemData.values,
+                                backgroundColor: [
+                                    '#3498db', '#e74c3c', '#2ecc71', '#f39c12', '#9b59b6',
+                                    '#1abc9c', '#d35400', '#34495e', '#7f8c8d', '#27ae60'
+                                ],
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    position: 'right',
+                                },
+                                tooltip: {
+                                    callbacks: {
+                                        label: function(context) {
+                                            const label = context.label || '';
+                                            const value = context.raw || 0;
+                                            const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                            const percentage = Math.round((value / total) * 100);
+                                            return `${label}: ${value.toFixed(2)} kg (${percentage}%)`;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    });
+                }
+                
+            } catch (error) {
+                console.error('Error loading monthly charts:', error);
+                // Show error message in chart containers
+                ['categoryChart', 'itemChart'].forEach(chartId => {
+                    const container = document.getElementById(chartId).parentElement;
+                    container.innerHTML = `
+                        <div class="chart-error">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <p>Could not load chart data</p>
+                            <small>${error.message}</small>
+                        </div>
+                    `;
+                });
+            }
+        }
+
+        async function generateTips() {
+    const btn = document.getElementById('generateTipsBtn');
+    const loadingIcon = document.getElementById('loadingIcon');
+    const tipsContainer = document.getElementById('aiTipsContainer');
+    
+    try {
+        // Show loading state
+        btn.disabled = true;
+        loadingIcon.style.display = 'inline-block';
+        tipsContainer.innerHTML = '';
+        
+        // Fetch tips from the server
+        const response = await fetch('/generate_tips');
+        
+        if (!response.ok) {
+            throw new Error(`Server error: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        
+        if (!data.success || !data.tips) {
+            throw new Error(data.message || 'No tips generated');
+        }
+
+        // Clean the tips HTML by removing markdown code blocks if present
+        let cleanTips = data.tips;
+        cleanTips = cleanTips.replace(/```html/g, '').replace(/```/g, '').trim();
+        
+        // Display the cleaned HTML content
+        tipsContainer.innerHTML = `
+            <h3><i class="fas fa-lightbulb"></i> Your Personalized Tips</h3>
+            ${cleanTips}
+            <div class="tip-footer">
+                <small>Generated by ${data.model || 'AI'}</small>
+            </div>
+        `;
+        tipsContainer.style.display = 'block';
+        
+    } catch (error) {
+        console.error('Error generating tips:', error);
+        tipsContainer.innerHTML = `
+            <div class="error-message">
+                <i class="fas fa-exclamation-triangle"></i>
+                ${error.message || 'Failed to generate tips. Please try again.'}
+            </div>
+        `;
+        tipsContainer.style.display = 'block';
+    } finally {
+        btn.disabled = false;
+        loadingIcon.style.display = 'none';
+    }
+}
+
+// Logout function
+function logout() {
+                // Send logout request to server
+                fetch('/logout', {
+                    method: 'POST',
+                    credentials: 'same-origin' // Include cookies if needed
+                })
+                .then(response => {
+                    if (response.ok) {
+                        // Redirect to login page after successful logout
+                        window.location.href = '/login.html';
+                    } else {
+                        throw new Error('Logout failed');
+                    }
+                })
+                .catch(error => {
+                    console.error('Logout error:', error);
+                    alert('Logout failed. Please try again.');
+                });
+            }
+    </script>
+</body>
+</html>

@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Carbon Footprint Calculator - Profile</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
+  <style>
+    /* General Styles */
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background: linear-gradient(135deg, #e6f2ed, #c1dacc);
+      margin: 0;
+      color: #333;
+      box-sizing: border-box;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* Floating animation */
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-20px); }
+    }
+
+    /* Background elements */
+    .bg-element {
+      position: absolute;
+      opacity: 0.3;
+      z-index: 0;
+      animation: float 15s ease-in-out infinite;
+    }
+
+    .bg-leaf-1 {
+      top: 15%;
+      left: 15%;
+      font-size: 8rem;
+      color: #2e8b57;
+      animation-delay: 0s;
+    }
+
+    .bg-leaf-2 {
+      bottom: 20%;
+      right: 15%;
+      font-size: 10rem;
+      color: #3cb371;
+      animation-delay: 3s;
+    }
+
+    .bg-leaf-3 {
+      top: 60%;
+      left: 25%;
+      font-size: 12rem;
+      color: #98fb98;
+      animation-delay: 6s;
+    }
+
+    /* Navbar styles */
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: linear-gradient(135deg, #2e8b57, #3cb371);
+      padding: 0.8rem 2rem;
+      color: white;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      height: 65px;
+    }
+
+    .navbar .logo {
+      font-size: 1.4em;
+      font-weight: 600;
+      color: white;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .navbar .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .navbar a {
+      color: white;
+      text-decoration: none;
+      padding: 8px 16px;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+      font-size: 0.95em;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .navbar a i {
+      font-size: 1.1em;
+    }
+
+    .navbar a:hover {
+      background: rgba(255, 255, 255, 0.15);
+      transform: translateY(-1px);
+    }
+
+    .navbar .logout-button {
+      background-color: #dc3545;
+      color: white;
+      border: none;
+      padding: 8px 18px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 0.95em;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .navbar .logout-button:hover {
+      background-color: #c82333;
+      transform: translateY(-1px);
+    }
+
+    .navbar .logout-button i {
+      font-size: 1.1em;
+    }
+
+    /* Main Content */
+    .main-content {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 25px 20px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Profile Container */
+    .profile-container {
+      background: rgba(255, 255, 255, 0.9);
+      padding: 25px;
+      border-radius: 15px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 550px;
+      position: relative;
+      backdrop-filter: blur(8px);
+      transition: all 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      height: calc(100vh - 170px);
+    }
+
+    .profile-container:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Profile Picture */
+    .profile-picture {
+      width: 150px;
+      height: 150px;
+      background: linear-gradient(135deg, #2e8b57, #3cb371);
+      color: white;
+      font-size: 3.5em;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 50%;
+      margin: 0 auto;
+      font-weight: bold;
+      border: 3px solid white;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      position: relative;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+      flex-shrink: 0;
+    }
+
+    .profile-picture:hover {
+      transform: scale(1.05);
+    }
+
+    .profile-picture img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+
+    .profile-picture .upload-overlay {
+      display: none;
+    }
+
+    #profile-image-input {
+      display: none;
+    }
+
+    /* Profile Details */
+    .profile-details {
+      background: rgba(255, 255, 255, 0.8);
+      border-radius: 15px;
+      padding: 20px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      flex: 1;
+    }
+
+    .profile-item {
+      display: flex;
+      align-items: center;
+      padding: 12px 15px;
+      border-radius: 10px;
+      transition: all 0.3s ease;
+    }
+
+    .profile-item:hover {
+      background: rgba(46, 139, 87, 0.1);
+    }
+
+    .profile-item i {
+      width: 35px;
+      height: 35px;
+      background: linear-gradient(135deg, #2e8b57, #3cb371);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 12px;
+      font-size: 1.1em;
+      flex-shrink: 0;
+    }
+
+    .profile-item label {
+      font-weight: 600;
+      color: #2e8b57;
+      min-width: 120px;
+      flex-shrink: 0;
+    }
+
+    .profile-item p {
+      color: #333;
+      margin: 0;
+      flex: 1;
+      text-align: left;
+      padding-left: 5px;
+    }
+
+    .profile-item.gender-item label {
+      min-width: 80px;
+    }
+
+    .profile-item.gender-item p {
+      padding-left: 0;
+    }
+
+    /* Buttons */
+    .button-container {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: -5px;
+      margin-bottom: 15px;
+    }
+
+    .button {
+      background: linear-gradient(135deg, #2e8b57, #3cb371);
+      color: white;
+      border: none;
+      padding: 12px 25px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+
+    .button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(46, 139, 87, 1);
+    }
+
+    .button i {
+      font-size: 1.2em;
+    }
+
+    /* Fixed Cropper Modal Styles */
+    .cropper-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.9);
+      z-index: 9999;
+      justify-content: center;
+      align-items: center;
+      opacity:1;
+    }
+
+    .cropper-container {
+      background: white;
+      padding: 25px;
+      border-radius: 15px;
+      width: 90%;
+      max-width: 600px;
+      box-shadow: 0 5px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    .cropper-preview-container {
+      width: 100%;
+      max-height: 60vh;
+      margin: 15px 0;
+      overflow: hidden;
+      border-radius: 10px;
+    }
+
+    .cropper-preview {
+      max-width: 100%;
+      display: block;
+    }
+
+    .cropper-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-top: 20px;
+      width: 100%;
+    }
+
+    .cropper-button {
+      padding: 12px 20px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 1rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-width: 150px;
+      color: white;
+      transition: all 0.3s ease;
+    }
+
+    .cropper-button.crop {
+      background: #2e8b57;
+    }
+
+    .cropper-button.cancel {
+      background: #dc3545;
+    }
+
+    .cropper-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .cropper-title {
+      color: #2e8b57;
+      font-size: 1.5rem;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+
+    .cropper-instructions {
+      color: #555;
+      text-align: center;
+      margin-bottom: 15px;
+    }
+
+    /* Responsive design */
+    @media (max-width: 768px) {
+      .navbar {
+        flex-direction: column;
+        padding: 1rem;
+      }
+
+      .navbar .nav-links {
+        flex-direction: column;
+        width: 100%;
+        margin-top: 1rem;
+      }
+
+      .navbar a {
+        width: 100%;
+        text-align: center;
+      }
+
+      .profile-container {
+        height: calc(100vh - 180px);
+        margin: 10px;
+        padding: 20px;
+      }
+
+      .button-container {
+        grid-template-columns: 1fr;
+      }
+
+      .cropper-buttons {
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .cropper-button {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Background elements -->
+  <i class="fas fa-leaf bg-element bg-leaf-1"></i>
+  <i class="fas fa-seedling bg-element bg-leaf-2"></i>
+  <i class="fas fa-spa bg-element bg-leaf-3"></i>
+
+  <!-- Navbar -->
+  <div class="navbar">
+    <a href="/main.html" class="logo">
+      <i class="fas fa-leaf"></i>
+      Carbon Footprint Calculator
+    </a>
+    <div class="nav-links">
+      <a href="/report.html">
+        <i class="fas fa-chart-bar"></i>
+        Report
+      </a>
+      <a href="/main.html">
+        <i class="fas fa-home"></i>
+        Main
+      </a>
+      <a href="/profile.html">
+        <i class="fas fa-user"></i>
+        Profile
+      </a>
+      <a href="/community.html">
+        <i class="fas fa-users"></i>
+        Community
+      </a>
+      <button class="logout-button" onclick="logout()">
+        <i class="fas fa-sign-out-alt"></i>
+        Logout
+      </button>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <div class="profile-container">
+      {% if user_profile %}
+        <div class="profile-picture" onclick="showEditOptions()">
+          {% if user_profile.profile_image %}
+            <img src="{{ user_profile.profile_image }}" alt="Profile Picture">
+          {% else %}
+            {{ user_profile.letter_dp }}
+          {% endif %}
+        </div>
+        <div class="edit-options" style="display: none; text-align: center; margin-top: 10px;">
+          <button class="button" onclick="document.getElementById('profile-image-input').click()">
+            <i class="fas fa-camera"></i>
+            Upload Photo
+          </button>
+          {% if user_profile.profile_image %}
+            <button class="button" style="background: #dc3545;" onclick="deleteProfileImage()">
+              <i class="fas fa-trash"></i>
+              Delete Photo
+            </button>
+          {% endif %}
+        </div>
+        <input type="file" id="profile-image-input" accept="image/*" onchange="handleImageUpload(event)">
+        <div style="text-align: center;">
+          <h1 style="color: #2e8b57; margin: 0 0 5px; font-size: 2em;">{{ user_profile.name }}</h1>
+          <p style="color: #666; margin: 0; font-size: 1.1em;">{{ user_profile.email }}</p>
+        </div>
+
+        <div class="profile-details">
+          <div class="profile-item">
+            <i class="fas fa-users"></i>
+            <label>Household Members:</label>
+            <p>{{ user_profile.household_members }}</p>
+          </div>
+          <div class="profile-item gender-item">
+            <i class="fas fa-venus-mars"></i>
+            <label>Gender:</label>
+            <p>{{ user_profile.gender }}</p>
+          </div>
+          <div class="profile-item">
+            <i class="fas fa-birthday-cake"></i>
+            <label>Date of Birth:</label>
+            <p>{{ user_profile.dob }}</p>
+          </div>
+        </div>
+      {% else %}
+        <div style="text-align: center;">
+          <h1 style="color: #2e8b57; font-size: 2em;">No Profile Data Found</h1>
+          <p style="color: #666; font-size: 1.1em;">Please complete your profile.</p>
+        </div>
+      {% endif %}
+
+      <div class="button-container">
+        <a href="/details.html" class="button">
+          <i class="fas fa-user-edit"></i>
+          Edit Profile
+        </a>
+        <a href="/main.html" class="button">
+          <i class="fas fa-tachometer-alt"></i>
+          Dashboard
+        </a>
+        <a href="/community.html" class="button">
+          <i class="fas fa-users"></i>
+          Community
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Cropper Modal -->
+  <div class="cropper-modal">
+    <div class="cropper-container">
+      <h2 class="cropper-title">Crop Your Profile Picture</h2>
+      <p class="cropper-instructions">Drag to reposition and resize the crop area</p>
+     
+      <div class="cropper-preview-container">
+        <img class="cropper-preview" src="" alt="Crop preview">
+      </div>
+     
+      <div class="cropper-buttons">
+        <button class="cropper-button crop">
+          <i class="fas fa-check"></i>
+          Crop & Save
+        </button>
+        <button class="cropper-button cancel">
+          <i class="fas fa-times"></i>
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+  <script>
+    let cropper = null;
+    const modal = document.querySelector('.cropper-modal');
+    const preview = document.querySelector('.cropper-preview');
+    const cropButton = document.querySelector('.cropper-button.crop');
+    const cancelButton = document.querySelector('.cropper-button.cancel');
+
+    function logout() {
+      window.location.href = "/login.html";
+    }
+
+    function handleImageUpload(event) {
+      const file = event.target.files[0];
+      if (file) {
+        if (file.size > 5 * 1024 * 1024) {
+          alert('File size too large. Please select an image under 5MB.');
+          return;
+        }
+
+        const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+        if (!allowedTypes.includes(file.type)) {
+          alert('Invalid file type. Please upload PNG, JPG, JPEG, or GIF.');
+          return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          preview.src = e.target.result;
+          modal.style.display = 'flex';
+         
+          if (cropper) {
+            cropper.destroy();
+          }
+         
+          preview.onload = function() {
+            cropper = new Cropper(preview, {
+              aspectRatio: 1,
+              viewMode: 1,
+              autoCropArea: 1,
+              responsive: true,
+              restore: false,
+              guides: true,
+              center: true,
+              highlight: true,
+              cropBoxMovable: true,
+              cropBoxResizable: true,
+              toggleDragModeOnDblclick: false,
+             
+              ready: function() {
+                this.cropper.setCropBoxData({
+                  width: Math.min(this.cropper.getContainerData().width, this.cropper.getContainerData().height),
+                  height: Math.min(this.cropper.getContainerData().width, this.cropper.getContainerData().height)
+                });
+              }
+            });
+          };
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+
+    cropButton.addEventListener('click', function() {
+      if (cropper) {
+        try {
+          const canvas = cropper.getCroppedCanvas({
+            width: 300,
+            height: 300
+          });
+         
+          canvas.toBlob(function(blob) {
+            const formData = new FormData();
+            formData.append('profile_image', blob, 'cropped_image.jpg');
+
+            const profilePicture = document.querySelector('.profile-picture');
+            profilePicture.style.opacity = '0.5';
+
+            fetch('/upload_profile_image', {
+              method: 'POST',
+              body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+              if (data.success) {
+                const img = profilePicture.querySelector('img') || document.createElement('img');
+                img.src = data.image_path;
+                img.alt = 'Profile Picture';
+                if (!profilePicture.querySelector('img')) {
+                  profilePicture.innerHTML = '';
+                  profilePicture.appendChild(img);
+                }
+                profilePicture.style.opacity = '1';
+                document.querySelector('.edit-options').style.display = 'none';
+              } else {
+                alert(data.message || 'Failed to upload image. Please try again.');
+                profilePicture.style.opacity = '1';
+              }
+            })
+            .catch(error => {
+              console.error('Error:', error);
+              alert('An error occurred while uploading the image.');
+              profilePicture.style.opacity = '1';
+            });
+
+            modal.style.display = 'none';
+            cropper.destroy();
+            cropper = null;
+          }, 'image/jpeg', 0.9);
+        } catch (error) {
+          console.error('Cropping error:', error);
+          alert('An error occurred while cropping the image. Please try again.');
+        }
+      }
+    });
+
+    cancelButton.addEventListener('click', function() {
+      modal.style.display = 'none';
+      if (cropper) {
+        cropper.destroy();
+        cropper = null;
+      }
+    });
+
+    modal.addEventListener('click', function(e) {
+      if (e.target === modal) {
+        modal.style.display = 'none';
+        if (cropper) {
+          cropper.destroy();
+          cropper = null;
+        }
+      }
+    });
+
+    function showEditOptions() {
+      const editOptions = document.querySelector('.edit-options');
+      if (editOptions.style.display === 'none') {
+        editOptions.style.display = 'block';
+      } else {
+        editOptions.style.display = 'none';
+      }
+    }
+
+    function deleteProfileImage() {
+      if (confirm('Are you sure you want to delete your profile picture?')) {
+        const profilePicture = document.querySelector('.profile-picture');
+        const userName = '{{ user_profile.name }}' || 'User';
+        const defaultLetterDP = userName.charAt(0).toUpperCase();
+       
+        fetch('/delete_profile_image', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          credentials: 'same-origin'
+        })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Server returned an error');
+          }
+          return response.json();
+        })
+        .then(data => {
+          updateProfileToLetterDP(profilePicture, data.letter_dp || defaultLetterDP);
+        })
+        .catch(error => {
+          console.error('Delete profile image: Error caught:', error);
+          updateProfileToLetterDP(profilePicture, defaultLetterDP);
+        });
+      }
+    }
+
+    function updateProfileToLetterDP(profilePicture, letterDP) {
+      if (profilePicture) {
+        profilePicture.innerHTML = '';
+        profilePicture.textContent = letterDP;
+        profilePicture.style.display = 'flex';
+        profilePicture.style.justifyContent = 'center';
+        profilePicture.style.alignItems = 'center';
+        profilePicture.style.fontSize = '3.5em';
+        profilePicture.style.fontWeight = 'bold';
+        profilePicture.style.color = 'white';
+        profilePicture.style.background = 'linear-gradient(135deg, #2e8b57, #3cb371)';
+       
+        const editOptions = document.querySelector('.edit-options');
+        if (editOptions) {
+          const deleteButton = editOptions.querySelector('button:last-child');
+          if (deleteButton) {
+            deleteButton.style.display = 'none';
+          }
+        }
+      }
+    }
+  </script>
+</body>
+</html>

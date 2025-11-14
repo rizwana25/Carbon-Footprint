@@ -1,0 +1,1023 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Energy Carbon Footprint Calculator</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #2e8b57;
+      --primary-dark: #3cb371;
+      --secondary: #2F80ED;
+      --danger: #EB5757;
+      --warning: #F2994A;
+      --light-gray: #F2F2F2;
+      --medium-gray: #E0E0E0;
+      --dark-gray: #828282;
+      --text: #333333;
+      --white: #FFFFFF;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+    
+    body {
+      background: linear-gradient(135deg, #e6f2ed, #c1dacc);
+      color: var(--text);
+      line-height: 1.6;
+      padding: 20px;
+      min-height: 100vh;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* Floating background elements */
+    .floating-bg {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      z-index: -1;
+      overflow: hidden;
+    }
+    
+    .floating-bg div {
+      position: absolute;
+      display: block;
+      width: 20px;
+      height: 20px;
+      background: rgba(46, 139, 87, 0.1);
+      animation: float 25s linear infinite;
+      border-radius: 50%;
+      bottom: -20px;
+    }
+    
+    /* Energy-themed elements - float from different sides */
+    .floating-bg div:nth-child(1) {
+      left: 25%;
+      top: -80px;
+      width: 80px;
+      height: 80px;
+      animation: floatFromTop 25s linear infinite;
+      animation-delay: 0s;
+      background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="rgba(46, 139, 87, 0.1)"><path d="M7 2v11h3v9l7-12h-4l4-8z"/></svg>') no-repeat center center;
+      background-size: contain;
+    }
+    
+    .floating-bg div:nth-child(2) {
+      left: 10%;
+      bottom: -20px;
+      width: 20px;
+      height: 20px;
+      animation: floatFromBottom 12s linear infinite;
+      animation-delay: 2s;
+      background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="rgba(46, 139, 87, 0.1)"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>') no-repeat center center;
+      background-size: contain;
+    }
+    
+    .floating-bg div:nth-child(3) {
+      right: -20px;
+      top: 30%;
+      width: 20px;
+      height: 20px;
+      animation: floatFromRight 20s linear infinite;
+      animation-delay: 4s;
+      background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="rgba(46, 139, 87, 0.1)"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.31-8.86c-1.77-.45-2.34-.94-2.34-1.67 0-.84.79-1.43 2.1-1.43 1.38 0 1.9.66 1.94 1.64h1.71c-.05-1.34-.87-2.57-2.49-2.97V5H10.9v1.69c-1.51.32-2.72 1.3-2.72 2.81 0 1.79 1.49 2.69 3.66 3.21 1.95.46 2.34 1.15 2.34 1.87 0 .53-.39 1.39-2.1 1.39-1.6 0-2.23-.72-2.32-1.64H8.04c.1 1.7 1.36 2.66 2.86 2.97V19h2.34v-1.67c1.52-.29 2.72-1.16 2.73-2.77-.01-2.2-1.9-2.96-3.66-3.42z"/></svg>') no-repeat center center;
+      background-size: contain;
+    }
+    
+    .floating-bg div:nth-child(4) {
+      left: 40%;
+      bottom: -60px;
+      width: 60px;
+      height: 60px;
+      animation: floatFromBottom 18s linear infinite;
+      animation-delay: 0s;
+      background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="rgba(46, 139, 87, 0.1)"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>') no-repeat center center;
+      background-size: contain;
+    }
+    
+    .floating-bg div:nth-child(5) {
+      left: -20px;
+      top: 50%;
+      width: 20px;
+      height: 20px;
+      animation: floatFromLeft 15s linear infinite;
+      animation-delay: 0s;
+      background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="rgba(46, 139, 87, 0.1)"><path d="M7 2v11h3v9l7-12h-4l4-8z"/></svg>') no-repeat center center;
+      background-size: contain;
+    }
+    
+    .floating-bg div:nth-child(6) {
+      right: -110px;
+      top: 60%;
+      width: 110px;
+      height: 110px;
+      animation: floatFromRight 22s linear infinite;
+      animation-delay: 3s;
+      background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="rgba(46, 139, 87, 0.1)"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>') no-repeat center center;
+      background-size: contain;
+    }
+    
+    .floating-bg div:nth-child(7) {
+      left: -150px;
+      top: 20%;
+      width: 150px;
+      height: 150px;
+      animation: floatFromLeft 28s linear infinite;
+      animation-delay: 7s;
+      background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="rgba(46, 139, 87, 0.1)"><path d="M7 2v11h3v9l7-12h-4l4-8z"/></svg>') no-repeat center center;
+      background-size: contain;
+    }
+    
+    .floating-bg div:nth-child(8) {
+      top: -25px;
+      left: 50%;
+      width: 25px;
+      height: 25px;
+      animation: floatFromTop 45s linear infinite;
+      animation-delay: 15s;
+      background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="rgba(46, 139, 87, 0.1)"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>') no-repeat center center;
+      background-size: contain;
+    }
+    
+    .floating-bg div:nth-child(9) {
+      right: -15px;
+      bottom: 30%;
+      width: 15px;
+      height: 15px;
+      animation: floatFromRight 35s linear infinite;
+      animation-delay: 2s;
+      background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="rgba(46, 139, 87, 0.1)"><path d="M7 2v11h3v9l7-12h-4l4-8z"/></svg>') no-repeat center center;
+      background-size: contain;
+    }
+    
+    .floating-bg div:nth-child(10) {
+      left: -150px;
+      bottom: 20%;
+      width: 150px;
+      height: 150px;
+      animation: floatFromLeft 11s linear infinite;
+      animation-delay: 0s;
+      background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="rgba(46, 139, 87, 0.1)"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>') no-repeat center center;
+      background-size: contain;
+    }
+    
+    /* Add more energy-themed elements */
+    .floating-bg div:nth-child(11) {
+      left: 15%;
+      top: -40px;
+      width: 40px;
+      height: 40px;
+      animation: floatFromTop 30s linear infinite;
+      animation-delay: 5s;
+      background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="rgba(46, 139, 87, 0.1)"><path d="M13 2.05v3.03c3.39.49 6 3.39 6 6.92 0 .9-.18 1.75-.5 2.54l2.54 1.27c.56-1.24.88-2.62.88-4.07 0-5.18-3.95-9.45-8.92-9.71zM12 19c-3.87 0-7-3.13-7-7 0-3.53 2.61-6.43 6-6.92V2.05c-4.94.25-8.91 4.43-8.91 9.65 0 5.52 4.47 10 9.99 10 3.31 0 6.24-1.61 8.06-4.09l-2.6-1.53C16.17 17.98 14.21 19 12 19z"/></svg>') no-repeat center center;
+      background-size: contain;
+    }
+    
+    .floating-bg div:nth-child(12) {
+      right: -70px;
+      top: 15%;
+      width: 70px;
+      height: 70px;
+      animation: floatFromRight 25s linear infinite;
+      animation-delay: 8s;
+      background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="rgba(46, 139, 87, 0.1)"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/></svg>') no-repeat center center;
+      background-size: contain;
+    }
+    
+    .floating-bg div:nth-child(13) {
+      left: -90px;
+      bottom: 40%;
+      width: 90px;
+      height: 90px;
+      animation: floatFromLeft 32s linear infinite;
+      animation-delay: 12s;
+      background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="rgba(46, 139, 87, 0.1)"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14zM7 10h2v7H7zm4-3h2v10h-2zm4 6h2v4h-2z"/></svg>') no-repeat center center;
+      background-size: contain;
+    }
+    
+    .floating-bg div:nth-child(14) {
+      right: -50px;
+      bottom: 10%;
+      width: 50px;
+      height: 50px;
+      animation: floatFromRight 28s linear infinite;
+      animation-delay: 6s;
+      background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="rgba(46, 139, 87, 0.1)"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/></svg>') no-repeat center center;
+      background-size: contain;
+    }
+    
+    .floating-bg div:nth-child(15) {
+      left: 70%;
+      top: -60px;
+      width: 60px;
+      height: 60px;
+      animation: floatFromTop 35s linear infinite;
+      animation-delay: 10s;
+      background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="rgba(46, 139, 87, 0.1)"><path d="M7 2v11h3v9l7-12h-4l4-8z"/></svg>') no-repeat center center;
+      background-size: contain;
+    }
+    
+    /* Animation keyframes for different directions */
+    @keyframes floatFromTop {
+      0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 1;
+        border-radius: 0;
+      }
+      100% {
+        transform: translateY(100vh) rotate(720deg);
+        opacity: 0;
+        border-radius: 50%;
+      }
+    }
+    
+    @keyframes floatFromBottom {
+      0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 1;
+        border-radius: 0;
+      }
+      100% {
+        transform: translateY(-100vh) rotate(720deg);
+        opacity: 0;
+        border-radius: 50%;
+      }
+    }
+    
+    @keyframes floatFromLeft {
+      0% {
+        transform: translateX(0) rotate(0deg);
+        opacity: 1;
+        border-radius: 0;
+      }
+      100% {
+        transform: translateX(100vw) rotate(720deg);
+        opacity: 0;
+        border-radius: 50%;
+      }
+    }
+    
+    @keyframes floatFromRight {
+      0% {
+        transform: translateX(0) rotate(0deg);
+        opacity: 1;
+        border-radius: 0;
+      }
+      100% {
+        transform: translateX(-100vw) rotate(720deg);
+        opacity: 0;
+        border-radius: 50%;
+      }
+    }
+    
+    @keyframes float {
+      0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 1;
+        border-radius: 0;
+      }
+      100% {
+        transform: translateY(-100vh) rotate(720deg);
+        opacity: 0;
+        border-radius: 50%;
+      }
+    }
+
+    .submission-status {
+      margin-bottom: 20px;
+      animation: fadeIn 0.5s;
+    }
+
+    .alert {
+      padding: 15px;
+      margin-bottom: 20px;
+      border-radius: 8px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      animation: fadeIn 0.3s ease-in-out;
+    }
+
+    .alert-info {
+      background-color: #e7f5ff;
+      color: #1864ab;
+      border-left: 4px solid #1864ab;
+    }
+
+    .alert i {
+      margin-right: 10px;
+      font-size: 1.2rem;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 15px;
+      padding: 30px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      backdrop-filter: blur(8px);
+      transition: all 0.3s ease;
+    }
+
+    .container:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    h1, h2, h3 {
+      color: var(--primary);
+      margin-bottom: 15px;
+    }
+
+    h1 {
+      font-size: 2.2rem;
+      font-weight: 600;
+      margin-bottom: 30px;
+      position: relative;
+      padding-bottom: 10px;
+      text-align: center;
+    }
+
+    h1:after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60px;
+      height: 4px;
+      background: linear-gradient(to right, var(--primary), var(--primary-dark));
+      border-radius: 2px;
+    }
+
+    h3 {
+      font-size: 1.4rem;
+      font-weight: 500;
+      margin-top: 20px;
+    }
+
+    .device-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px;
+      border: 1px solid var(--medium-gray);
+      border-radius: 8px;
+      margin-bottom: 15px;
+      background: var(--white);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .device-row:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    .device-row span {
+      font-weight: 500;
+    }
+
+    .device-row input {
+      width: 70px;
+      padding: 8px 12px;
+      border: 1px solid var(--medium-gray);
+      border-radius: 8px;
+      text-align: center;
+      font-size: 1rem;
+      transition: border 0.3s ease;
+    }
+
+    .device-row input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(46, 139, 87, 0.2);
+    }
+
+    .device-emission {
+      font-weight: 500;
+      color: var(--primary);
+    }
+
+    .results {
+      margin-top: 30px;
+      padding: 20px;
+      background: #e8f5e9;
+      border-radius: 8px;
+      border-left: 4px solid var(--primary);
+    }
+
+    .results h3 {
+      margin-top: 0;
+    }
+
+    .results div {
+      margin: 10px 0;
+      padding: 10px;
+      background: var(--white);
+      border-radius: 6px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+
+    .btn {
+      display: inline-block;
+      background: linear-gradient(to right, var(--primary), var(--primary-dark));
+      color: white;
+      padding: 12px 24px;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-align: center;
+      text-decoration: none;
+      width: 100%;
+      margin-top: 20px;
+    }
+
+    .btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(46, 139, 87, 0.3);
+    }
+
+    .btn:disabled {
+      background-color: var(--dark-gray);
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    #notification {
+      display: none;
+      padding: 15px;
+      margin-top: 20px;
+      border-radius: 8px;
+      text-align: center;
+      background: linear-gradient(to right, var(--primary), var(--primary-dark));
+      color: white;
+      font-weight: 500;
+      animation: fadeIn 0.3s ease-in-out;
+    }
+
+    #notification.error {
+      background-color: var(--danger);
+    }
+
+    .arrow-button {
+      background: linear-gradient(to right, var(--primary), var(--primary-dark));
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      font-size: 24px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+    }
+
+    .arrow-button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(46, 139, 87, 0.3);
+    }
+    
+    .arrow-button.prev-button {
+      right: auto;
+      left: 20px;
+    }
+
+    .loading {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border: 3px solid rgba(255,255,255,0.3);
+      border-radius: 50%;
+      border-top-color: white;
+      animation: spin 1s ease-in-out infinite;
+      margin-left: 10px;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--dark-gray);
+    }
+
+    .empty-state i {
+      font-size: 3rem;
+      color: var(--medium-gray);
+      margin-bottom: 20px;
+    }
+
+    .empty-state p {
+      font-size: 1.1rem;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+  </style>
+</head>
+<body>
+  <div class="floating-bg">
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+  </div>
+  
+  <div class="container">
+    <h1><i class="fas fa-bolt"></i> Energy Carbon Footprint Calculator</h1>
+    <div id="deviceList"></div>
+    <button id="saveButton" class="btn"><i class="fas fa-save"></i> Save Energy Data</button>
+    <div class="results" id="results"></div>
+    <div id="notification"></div>
+  </div>
+
+  <button class="arrow-button" onclick="window.location.href='wastecalc.html'"><i class="fas fa-arrow-right"></i></button>
+
+  <button class="arrow-button prev-button" onclick="window.location.href='main.html'"><i class="fas fa-arrow-left"></i></button>
+
+  <script>
+    // Predefined emission factors for different devices
+    const predefinedDeviceEmissions = {
+      'Incandescent Bulb': 0.0285,
+      'CFL Bulb': 0.0071,
+      'LED Bulb': 0.0048,
+      'Fluorescent Tube Light': 0.019,
+      'LED Tube Light': 0.0095,
+      'Conventional Ceiling Fan': 0.0356,
+      'BLDC Ceiling Fan': 0.0166,
+      'Wall Fan': 0.0238,
+      'Table Fan': 0.0285,
+      'Manual Washing Machine': 0.095,
+      'Top Load Washing Machine': 0.2375,
+      'Front Load Washing Machine': 0.570,
+      '0 Star Normal AC': 0.855,
+      '1 Star Normal AC': 0.76,
+      '2 Star Normal AC': 0.665,
+      '3 Star Normal AC': 0.57,
+      '4 Star Normal AC': 0.475,
+      '5 Star Normal AC': 0.38,
+      '0 Star Inverter AC': 0.7125,
+      '1 Star Inverter AC': 0.6175,
+      '2 Star Inverter AC': 0.5225,
+      '3 Star Inverter AC': 0.4275,
+      '4 Star Inverter AC': 0.3325,
+      '5 Star Inverter AC': 0.2375,
+      'No Star Refrigerator': 0.0597,
+      '1 Star Refrigerator': 0.0529,
+      '2 Star Refrigerator': 0.0424,
+      '3 Star Refrigerator': 0.0339,
+      '4 Star Refrigerator': 0.0272,
+      '5 Star Refrigerator': 0.0217,
+      '600 VA Inverter': 0.228,
+      '800 VA Inverter': 0.304,
+      '1000 VA Inverter': 0.38,
+      '1500 VA Inverter': 0.57,
+      'Microwave Oven': 0.285,
+      'Desktop Computer': 0.095,
+      'Laptop Charging': 0.0285,
+      'Phone Charging': 0.0095,
+      'Juicer Machine': 0.07125,
+      'Iron Box': 0.2375,
+      'LPG Stove': 0.2682,
+      'Hair Dryer': 0.178,
+      'Induction Cooktop': 0.475,
+      'Electric Kettle': 0.171,
+      'Blender': 0.0475,
+      'Kitchen Hood (Chimney)': 0.11875,
+      'Vacuum Cleaner': 0.285,
+      'Dishwasher': 1.06875,
+      'Coffee Machine': 0.095,
+      'Water Purifier': 0.04275,
+      'Air Cooler': 0.76,
+      'Air Fryer': 0.35625,
+      'Hair Straightener': 0.082,
+      'Hair Curler': 0.066,
+      'Water Heater': 2.46,
+      'Room Heater': 2.05,
+      'Toaster': 0.98,
+      'Air Purifier': 0.41,
+      'Electric Geyser': 0.950,
+      'Solar Geyser': 0.095,
+      'Electric Water Heater': 0.950,
+      'Solar Water Heater': 0.095,
+      'Electric Oven': 0.950,
+      'Gas Oven': 0.2375,
+      'Electric Stove': 0.950,
+      'Gas Stove': 0.2375,
+      'Electric Toaster': 0.2375,
+      'Electric Sandwich Maker': 0.2375,
+      'Electric Rice Cooker': 0.2375,
+      'Electric Pressure Cooker': 0.2375,
+      'Electric Mixer': 0.095,
+      'Electric Food Processor': 0.095,
+      'Electric Grinder': 0.095,
+      'Electric Deep Fryer': 0.950,
+      'Electric Waffle Maker': 0.2375,
+      'Electric Ice Cream Maker': 0.2375,
+      'Electric Popcorn Maker': 0.2375,
+      'Electric Hot Plate': 0.950,
+      'Electric Griddle': 0.950,
+      'Electric Roti Maker': 0.2375,
+      'Electric Chapati Maker': 0.2375,
+      'Electric Idli Maker': 0.2375,
+      'Electric Dosa Maker': 0.2375,
+      'Electric Vada Maker': 0.2375,
+      'Electric Paniyaram Maker': 0.2375,
+      'Electric Appam Maker': 0.2375,
+      'Electric Pongal Maker': 0.2375,
+      'Electric Upma Maker': 0.2375,
+      'Electric Pasta Maker': 0.2375,
+      'Electric Noodle Maker': 0.2375,
+      'Electric Bread Maker': 0.2375,
+      'Electric Pizza Maker': 0.2375,
+      'Electric Grill': 0.950,
+      'Electric Barbecue': 0.950,
+      'Electric Smoker': 0.950,
+      'Electric Dehydrator': 0.2375,
+      'Electric Yogurt Maker': 0.2375,
+      'Electric Ice Maker': 0.2375,
+      'Electric Wine Cooler': 0.2375,
+      'Electric Beer Cooler': 0.2375,
+      'Electric Soda Maker': 0.2375,
+      'Electric Ice Crusher': 0.095,
+      'Electric Ice Shaver': 0.095,
+      'Electric Ice Cream Scoop': 0.095
+    };
+
+    // TV emission factors based on type and size
+    const tvEmissions = {
+      Plasma: {
+        "15": 0.0713, "17": 0.0760, "19": 0.0855, "24": 0.1045,
+        "30": 0.1282, "32": 0.1425, "37": 0.1805, "42": 0.220, "50": 0.285
+      },
+      LED: {
+        "15": 0.0071, "17": 0.0086, "19": 0.0095, "24": 0.0114,
+        "30": 0.0238, "32": 0.0261, "37": 0.0285, "42": 0.0380, "50": 0.0475
+      },
+      LCD: {
+        "15": 0.0086, "17": 0.0095, "19": 0.0105, "24": 0.0190,
+        "30": 0.0285, "32": 0.0333, "37": 0.0380, "42": 0.0570, "50": 0.0713
+      }
+    };
+
+    // Function to get TV emission factor based on type and size
+    function getTVEmissionFactor(deviceName) {
+      if (!deviceName.includes('TV')) return 0.2;
+      
+      // Handle both formats: "TV Type - Size" and "TV Type (Size inches)"
+      let tvType, size;
+      
+      if (deviceName.includes('(')) {
+        // Format: "Plasma TV (50 inches)"
+        const parts = deviceName.split('(');
+        tvType = parts[0].trim().split(' ')[0]; // Get "Plasma" from "Plasma TV"
+        const sizeMatch = parts[1].match(/\d+/);
+        if (!sizeMatch) return 0.2;
+        size = sizeMatch[0];
+      } else {
+        // Format: "LED TV - 32 inch"
+        const parts = deviceName.split(' - ');
+        if (parts.length !== 2) return 0.2;
+        tvType = parts[0].trim().split(' ')[0];
+        const sizeMatch = parts[1].match(/\d+/);
+        if (!sizeMatch) return 0.2;
+        size = sizeMatch[0];
+      }
+      
+      console.log('TV Type:', tvType, 'Size:', size); // Debug log
+      
+      if (tvEmissions[tvType] && tvEmissions[tvType][size]) {
+        return tvEmissions[tvType][size];
+      }
+      
+      return 0.2; // Default if type or size not found
+    }
+
+    let userId = null;
+
+    // Fetch the current user's ID
+    async function fetchUserId() {
+      try {
+        const response = await fetch('/get_user_id');
+        const data = await response.json();
+        if (response.ok) {
+          userId = data.user_id;
+          return userId;
+        } else {
+          showNotification('Failed to fetch user ID.', true);
+          return null;
+        }
+      } catch (error) {
+        console.error('Error fetching user ID:', error);
+        showNotification('An error occurred while fetching user ID.', true);
+        return null;
+      }
+    }
+
+    // Function to get user-specific localStorage key
+    function getUserKey(key) {
+      return userId ? `${key}_${userId}` : key;
+    }
+
+    // Check for new day and reset if needed
+    function checkForNewDay() {
+      const today = new Date().toISOString().split('T')[0];
+      const lastSaveDate = localStorage.getItem(getUserKey('lastEnergySaveDate'));
+      
+      if (lastSaveDate !== today) {
+        localStorage.removeItem(getUserKey('energyFootprint'));
+        localStorage.removeItem(getUserKey('energyDevices'));
+        localStorage.setItem(getUserKey('lastEnergySaveDate'), today);
+        return true;
+      }
+      return false;
+    }
+
+    // Function to update individual device emissions
+    function updateDeviceEmission(input) {
+      const deviceName = input.dataset.device;
+      const hours = parseFloat(input.value) || 0;
+      
+      // Handle TV type names
+      let emissionFactor = 0;
+      if (deviceName.includes('TV')) {
+        emissionFactor = getTVEmissionFactor(deviceName);
+        console.log('Device:', deviceName, 'Emission Factor:', emissionFactor); // Debug log
+      } else {
+        emissionFactor = predefinedDeviceEmissions[deviceName] || 0.2;
+      }
+      
+      const emission = emissionFactor * hours;
+      const emissionSpan = input.parentElement.querySelector('.device-emission');
+      emissionSpan.textContent = `${emission.toFixed(2)} kg CO₂`;
+      updateTotalEmission();
+    }
+
+    // Function to update total emission
+    function updateTotalEmission() {
+      const resultsDiv = document.getElementById('results');
+      let totalEmissions = 0;
+      const deviceEmissions = [];
+
+      document.querySelectorAll('.device-row').forEach(row => {
+        const deviceName = row.querySelector('span').textContent;
+        const hoursInput = row.querySelector('input');
+        const hours = parseFloat(hoursInput.value) || 0;
+        
+        // Handle TV type names
+        let emissionFactor = 0;
+        if (deviceName.includes('TV')) {
+          emissionFactor = getTVEmissionFactor(deviceName);
+        } else {
+          emissionFactor = predefinedDeviceEmissions[deviceName] || 0.2;
+        }
+        
+        if (hours > 0) {
+          const emission = emissionFactor * hours;
+          totalEmissions += emission;
+          deviceEmissions.push({
+            device: deviceName,
+            hours: hours,
+            emission: emission,
+            factor: emissionFactor
+          });
+        }
+      });
+
+      if (deviceEmissions.length > 0) {
+        resultsDiv.innerHTML = `
+          <h3><i class="fas fa-chart-pie"></i> Carbon Emissions Breakdown:</h3>
+          <div style="margin-bottom: 15px;">
+            ${deviceEmissions.map(item => `
+              <div style="margin: 5px 0; padding: 10px; background: var(--white); border-radius: 6px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);">
+                <strong>${item.device}</strong>: ${item.hours} hours × ${item.factor.toFixed(4)} kg CO₂/hour = <span style="color: var(--primary); font-weight: 500;">${item.emission.toFixed(2)} kg CO₂</span>
+              </div>
+            `).join('')}
+          </div>
+          <div style="font-weight: bold; margin-top: 15px; padding-top: 15px; border-top: 1px solid var(--medium-gray);">
+            <i class="fas fa-leaf"></i> Total Carbon Emissions: <span style="color: var(--primary);">${totalEmissions.toFixed(2)} kg CO₂</span>
+          </div>
+        `;
+      } else {
+        resultsDiv.innerHTML = '';
+      }
+    }
+
+    // Fetch and populate saved devices for the current user
+    async function fetchSelectedDevices() {
+      try {
+        // First fetch the list of selected devices
+        const devicesResponse = await fetch('/get_energy_devices');
+        const devicesData = await devicesResponse.json();
+        
+        // Then fetch any saved calculations
+        const savedResponse = await fetch('/get_saved_energy_data');
+        const savedData = await savedResponse.json();
+        
+        const deviceListDiv = document.getElementById('deviceList');
+        deviceListDiv.innerHTML = ''; // Clear existing content
+        
+        // Use a Set to ensure unique devices
+        const uniqueDevices = new Set(devicesData.devices || []);
+        
+        // If we have selected devices, display them
+        if (uniqueDevices.size > 0) {
+          Array.from(uniqueDevices).forEach(device => {
+            const deviceRow = document.createElement('div');
+            deviceRow.className = 'device-row';
+            
+            // Check if we have saved data for this device
+            const savedDetails = savedData.success && savedData.savedData ? savedData.savedData[device] : null;
+            
+            deviceRow.innerHTML = `
+              <span>${device}</span>
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <input type="number" min="0" step="1" 
+                       value="${savedDetails ? savedDetails.hours : 0}" 
+                       placeholder="Hours" 
+                       data-device="${device}"
+                       onchange="updateDeviceEmission(this)" />
+                <span class="device-emission" data-device="${device}">0 kg CO₂</span>
+              </div>
+            `;
+            deviceListDiv.appendChild(deviceRow);
+          });
+        } else {
+          deviceListDiv.innerHTML = `
+            <div class="empty-state">
+              <i class="fas fa-plug"></i>
+              <h3>No Devices Added Yet</h3>
+              <p>Please add devices from the Energy page first to calculate your carbon footprint.</p>
+            </div>
+          `;
+        }
+
+        // Update the emissions display
+        updateTotalEmission();
+      } catch (error) {
+        console.error('Error fetching devices:', error);
+        showNotification('An error occurred while loading your devices.', true);
+      }
+    }
+
+    // Function to save energy data
+    async function saveEnergyData() {
+      const saveButton = document.getElementById('saveButton');
+      saveButton.disabled = true;
+      saveButton.innerHTML = 'Saving... <span class="loading"></span>';
+
+      try {
+        const devices = [];
+        const deviceRows = document.querySelectorAll('.device-row');
+        
+        deviceRows.forEach(row => {
+          const deviceName = row.querySelector('span').textContent;
+          const hoursInput = row.querySelector('input');
+          const hours = parseFloat(hoursInput.value) || 0;
+          
+          // Handle TV type names
+          let emissionFactor = 0;
+          if (deviceName.includes('TV')) {
+            // Extract the TV type (e.g., "LED" from "LED TV - 32 inch")
+            const tvType = deviceName.split(' - ')[0];
+            emissionFactor = getTVEmissionFactor(deviceName);
+          } else {
+            emissionFactor = predefinedDeviceEmissions[deviceName] || 0.2; // Default to 0.2 for unknown devices
+          }
+          
+          const emission = emissionFactor * hours;
+          devices.push({
+            device_name: deviceName,
+            hours_used: hours,
+            carbon_emissions: emission
+          });
+        });
+
+        const response = await fetch('/save_energy_data', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            devices: devices
+          })
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to save energy data');
+        }
+
+        const result = await response.json();
+        
+        // Save the date of successful save
+        localStorage.setItem(getUserKey('lastEnergySaveDate'), new Date().toISOString().split('T')[0]);
+        
+        showNotification('Energy data saved successfully!', false);
+        
+        // Refresh the page to show updated data
+        setTimeout(() => {
+          window.location.reload();
+        }, 1500);
+
+      } catch (error) {
+        console.error('Error saving energy data:', error);
+        showNotification('Failed to save energy data. Please try again.', true);
+      } finally {
+        saveButton.disabled = false;
+        saveButton.textContent = 'Save Energy Data';
+      }
+    }
+
+    // Check submission status
+    async function checkSubmissionStatus() {
+      try {
+        const response = await fetch('/check_submission_status');
+        if (!response.ok) {
+          throw new Error('Failed to check submission status');
+        }
+        
+        const data = await response.json();
+        
+        if (data.submitted) {
+          document.getElementById('saveButton').disabled = true;
+          
+          const statusDiv = document.createElement('div');
+          statusDiv.className = 'submission-status';
+          statusDiv.innerHTML = `
+            <div class="alert alert-info">
+              <i class="fas fa-check-circle"></i> Daily submission already completed
+            </div>
+          `;
+          document.querySelector('.container').prepend(statusDiv);
+        }
+      } catch (error) {
+        console.error('Error checking submission status:', error);
+      }
+    }
+
+    // Show notification message
+    function showNotification(message, isError) {
+      const notification = document.getElementById('notification');
+      notification.textContent = message;
+      notification.style.display = 'block';
+      notification.className = isError ? 'error' : '';
+      
+      setTimeout(() => {
+        notification.style.display = 'none';
+      }, 3000);
+    }
+
+    // Initialize page
+    async function initializePage() {
+      await fetchUserId();
+      if (checkForNewDay()) {
+        showNotification('A new day has started - data has been reset.', false);
+      }
+      await fetchSelectedDevices();
+      await checkSubmissionStatus();
+    }
+
+    // Call initializePage when the document is ready
+    document.addEventListener('DOMContentLoaded', initializePage);
+
+    // Add save button event listener
+    document.getElementById('saveButton').addEventListener('click', saveEnergyData);
+  </script>
+</body>
+</html>

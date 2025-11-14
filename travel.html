@@ -1,0 +1,1070 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Travel Section</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Montserrat', sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #e6f2ed, #c1dacc);
+            color: #333;
+            min-height: 100vh;
+            box-sizing: border-box;
+        }
+
+        /* Navigation Bar */
+        nav {
+            background: linear-gradient(135deg, #2e8b57, #3cb371);
+            padding: 15px 0;
+            margin: -20px -20px 30px -20px;
+        }
+
+        nav > div {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .logo {
+            color: white;
+            text-decoration: none;
+            font-size: 1.2rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: background-color 0.3s;
+            font-weight: 500;
+        }
+
+        nav a:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .logout-button {
+            background-color: rgba(255, 255, 255, 0.15);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 500;
+            margin: 0;
+            width: auto;
+        }
+
+        .logout-button:hover {
+            background-color: rgba(255, 255, 255, 0.25);
+        }
+
+        /* Section Styling */
+        .section {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 8px 32px rgba(46, 139, 87, 0.1);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+
+        /* Headings */
+        h1, h2 {
+            font-family: 'Montserrat', sans-serif;
+            color: #2e8b57;
+            margin-bottom: 20px;
+            font-weight: 600;
+            border-bottom: 2px solid rgba(46, 139, 87, 0.1);
+            padding-bottom: 10px;
+        }
+
+        h2 {
+            font-size: 1.4rem;
+        }
+
+        /* Vehicle Section */
+        .vehicle-section {
+            margin-bottom: 30px;
+        }
+
+        /* Dropdown Styling */
+        select {
+            width: 100%;
+            padding: 12px;
+            font-size: 1rem;
+            border: 1px solid rgba(46, 139, 87, 0.2);
+            border-radius: 8px;
+            margin-bottom: 15px;
+            background-color: white;
+            cursor: pointer;
+            font-family: 'Montserrat', sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        select:hover {
+            border-color: #2e8b57;
+            box-shadow: 0 0 0 2px rgba(46, 139, 87, 0.1);
+        }
+
+        /* Search Bar */
+        .search-container {
+            margin-bottom: 20px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .search-container input {
+            flex: 1;
+            padding: 12px;
+            font-size: 1rem;
+            border: 1px solid rgba(46, 139, 87, 0.2);
+            border-radius: 8px;
+            font-family: 'Montserrat', sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        .search-container input:focus {
+            outline: none;
+            border-color: #2e8b57;
+            box-shadow: 0 0 0 2px rgba(46, 139, 87, 0.1);
+        }
+
+        .search-container button {
+            padding: 12px 25px;
+            background: linear-gradient(135deg, #2e8b57, #3cb371);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            font-family: 'Montserrat', sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        .search-container button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(46, 139, 87, 0.3);
+        }
+
+        /* Search Results */
+        #searchResults {
+            margin-top: 10px;
+            border: 1px solid rgba(46, 139, 87, 0.2);
+            border-radius: 8px;
+            background-color: white;
+            max-height: 150px;
+            overflow-y: auto;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        #searchResults div {
+            padding: 12px;
+            cursor: pointer;
+            border-bottom: 1px solid rgba(46, 139, 87, 0.1);
+            transition: background-color 0.3s ease;
+        }
+
+        #searchResults div:hover {
+            background-color: rgba(46, 139, 87, 0.05);
+        }
+
+        /* Selected Vehicles List */
+        #selectedVehiclesList {
+            margin-top: 25px;
+        }
+
+        #selectedVehiclesList div {
+            margin-bottom: 15px;
+            padding: 15px;
+            border: 1px solid rgba(46, 139, 87, 0.1);
+            border-radius: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: white;
+            transition: all 0.3s ease;
+        }
+
+        #selectedVehiclesList div:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(46, 139, 87, 0.1);
+        }
+
+        #selectedVehiclesList button {
+            padding: 8px 16px;
+            background: linear-gradient(135deg, #ff6b6b, #ee5253);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            font-family: 'Montserrat', sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        #selectedVehiclesList button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 107, 107, 0.3);
+        }
+
+        /* Button Container */
+        .button-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        /* Save Button */
+        #saveButton {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 30px;
+            background: linear-gradient(135deg, #2e8b57, #3cb371);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            font-family: 'Montserrat', sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        #saveButton:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(46, 139, 87, 0.3);
+        }
+
+        /* Arrow Button */
+        .arrow-button {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: linear-gradient(135deg, #2e8b57, #3cb371);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 24px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(46, 139, 87, 0.3);
+            transition: all 0.3s ease;
+            z-index: 2;
+        }
+
+        .arrow-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(46, 139, 87, 0.4);
+        }
+
+        .prev-button {
+            right: auto;
+            left: 30px;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
+            .section {
+                padding: 20px;
+            }
+
+            nav > div {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .nav-links {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            nav a {
+                width: 100%;
+                text-align: center;
+            }
+
+            .logout-button {
+                width: 100%;
+            }
+
+            .arrow-button {
+                bottom: 20px;
+                right: 20px;
+            }
+
+            .prev-button {
+                right: auto;
+                left: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav>
+        <div>
+            <a href="/main.html" class="logo">
+                <i class="fas fa-leaf"></i>
+                Daily Carbon Calculator
+            </a>
+            <div class="nav-links">
+                <a href="/report.html">
+                    <i class="fas fa-chart-bar"></i>
+                    Report
+                </a>
+                <a href="/main.html">
+                    <i class="fas fa-home"></i>
+                    Main
+                </a>
+                <a href="/profile.html">
+                    <i class="fas fa-user"></i>
+                    Profile
+                </a>
+                <button class="logout-button" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i>
+                    Logout
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Travel Section -->
+    <div class="section">
+        <h1>Travel Section</h1>
+
+        <!-- Search Bar -->
+        <div class="search-container">
+            <input type="text" id="searchInput" placeholder="Search for a vehicle...">
+            <button id="searchButton">Search</button>
+        </div>
+        <div id="searchResults"></div>
+
+        <!-- Two-Wheelers Section -->
+        <h2>Two-Wheelers</h2>
+        <select id="twoWheelers">
+            <option value="" disabled selected>Select Two-Wheeler</option>
+            <!-- Motorcycles -->
+            <optgroup label="Motorcycles 75-110cc (Entry-Level Commuters)">
+                <option value="Motorcycle <110 CC">Bajaj CT 100 (99.27cc)</option>
+                <option value="Motorcycle <110 CC">Bajaj Platina 100 (102cc)</option>
+                <option value="Motorcycle <110 CC">Hero HF Deluxe (97.2cc)</option>
+                <option value="Motorcycle <110 CC">Hero Splendor Plus (97.2cc)</option>
+                <option value="Motorcycle <110 CC">Honda CD 110 Dream (109.19cc)</option>
+                <option value="Motorcycle <110 CC">TVS Sport (99.7cc)</option>
+                <option value="Motorcycle <110 CC">Hero Splendor iSmart 110 (113cc)</option>
+                <option value="Motorcycle <110 CC">Hero Passion Pro (110cc)</option>
+                <option value="Motorcycle <110 CC">Hero Passion XPro (110cc)</option>
+                <option value="Motorcycle <110 CC">Honda Livo (110cc)</option>
+                <option value="Motorcycle <110 CC">TVS Radeon (109.7cc)</option>
+                <option value="Motorcycle <110 CC">TVS Star City Plus (109.7cc)</option>
+            </optgroup>
+            <optgroup label="Motorcycles 110-125cc (Economy Commuters)">
+                <option value="Motorcycle <125 CC">Bajaj Pulsar 125 (124.4cc)</option>
+                <option value="Motorcycle <125 CC">Hero Glamour (124.7cc)</option>
+                <option value="Motorcycle <125 CC">Honda Shine (124cc)</option>
+                <option value="Motorcycle <125 CC">TVS Raider 125 (124.8cc)</option>
+                <option value="Motorcycle <125 CC">Yamaha Saluto 125 (125cc)</option>
+                <option value="Motorcycle <125 CC">Hero Super Splendor (124.7cc)</option>
+                <option value="Motorcycle <125 CC">Hero Xtreme 125R (124cc)</option>
+                <option value="Motorcycle <125 CC">Bajaj Discover 125 (124.6cc)</option>
+                <option value="Motorcycle <125 CC">Honda SP 125 (124cc)</option>
+                <option value="Motorcycle <125 CC">TVS Apache RTR 125 (124.8cc)</option>
+            </optgroup>
+            <optgroup label="Motorcycles 125-150cc (Performance Commuters)">
+                <option value="Motorcycle <150 CC">Bajaj Pulsar 150 (149.5cc)</option>
+                <option value="Motorcycle <150 CC">Hero Xtreme 160R (163cc)</option>
+                <option value="Motorcycle <150 CC">Honda Unicorn (149.2cc)</option>
+                <option value="Motorcycle <150 CC">TVS Apache RTR 160 (159.7cc)</option>
+                <option value="Motorcycle <150 CC">Yamaha FZ-S FI (149cc)</option>
+                <option value="Motorcycle <150 CC">Hero Achiever (149cc)</option>
+                <option value="Motorcycle <150 CC">Bajaj Pulsar NS125 (124.4cc)</option>
+                <option value="Motorcycle <150 CC">Honda CB Hornet 160R (162.7cc)</option>
+                <option value="Motorcycle <150 CC">TVS Apache RTR 160 4V (159.7cc)</option>
+            </optgroup>
+            <optgroup label="Motorcycles 150-250cc (Premium Bikes)">
+                <option value="Motorcycle <250 CC">Bajaj Pulsar NS160 (160.3cc)</option>
+                <option value="Motorcycle <250 CC">Bajaj Pulsar NS200 (199.5cc)</option>
+                <option value="Motorcycle <250 CC">KTM 200 Duke (199.5cc)</option>
+                <option value="Motorcycle <250 CC">Royal Enfield Hunter 350 (349cc)</option>
+                <option value="Motorcycle <250 CC">TVS Apache RTR 200 4V (197.75cc)</option>
+                <option value="Motorcycle <250 CC">Yamaha R15 V4 (155cc)</option>
+                <option value="Motorcycle <250 CC">Hero Xpulse 200 (199.6cc)</option>
+                <option value="Motorcycle <250 CC">Bajaj Dominar 250 (248.8cc)</option>
+                <option value="Motorcycle <250 CC">KTM 125 Duke (124.7cc)</option>
+                <option value="Motorcycle <250 CC">Java Jawa 42 (293cc)</option>
+                <option value="Motorcycle <250 CC">Java Perak (334cc)</option>
+            </optgroup>
+            <optgroup label="Motorcycles 250-500cc (Power Cruisers)">
+                <option value="Motorcycle <500 CC">Bajaj Dominar 400 (373.3cc)</option>
+                <option value="Motorcycle <500 CC">KTM 250 Duke (248.8cc)</option>
+                <option value="Motorcycle <500 CC">KTM 390 Duke (373.2cc)</option>
+                <option value="Motorcycle <500 CC">Royal Enfield Classic 350 (349cc)</option>
+                <option value="Motorcycle <500 CC">Royal Enfield Himalayan 450 (452cc)</option>
+                <option value="Motorcycle <500 CC">Honda CB300R (286cc)</option>
+                <option value="Motorcycle <500 CC">Royal Enfield Bullet 350 (346cc)</option>
+            </optgroup>
+            <optgroup label="Motorcycles 500cc+ (Superbikes & Tourers)">
+                <option value="Motorcycle 500cc+">Royal Enfield Super Meteor 650 (648cc)</option>
+                <option value="Motorcycle 500cc+">KTM 390 Adventure (373cc)</option>
+                <option value="Motorcycle 500cc+">BMW G 310 R (313cc)</option>
+                <option value="Motorcycle 500cc+">Kawasaki Ninja 300 (296cc)</option>
+                <option value="Motorcycle 500cc+">Kawasaki Ninja 650 (649cc)</option>
+                <option value="Motorcycle 500cc+">Triumph Speed 400 (398cc)</option>
+                <option value="Motorcycle 500cc+">Royal Enfield Interceptor 650 (648cc)</option>
+            </optgroup>
+            <!-- Scooters -->
+            <optgroup label="Scooters 75-110cc (Entry-Level)">
+                <option value="Scooter <110 CC">TVS Jupiter (109.7cc)</option>
+                <option value="Scooter <110 CC">Honda Activa 6G (109.51cc)</option>
+                <option value="Scooter <110 CC">Hero Pleasure Plus (110.9cc)</option>
+                <option value="Scooter <110 CC">Suzuki Access 125 (124cc)</option>
+            </optgroup>
+            <optgroup label="Scooters 110-125cc (Premium)">
+                <option value="Scooter <125 CC">Honda Activa 125 (124cc)</option>
+                <option value="Scooter <125 CC">TVS NTORQ 125 (124.8cc)</option>
+                <option value="Scooter <125 CC">Yamaha Fascino 125 (125cc)</option>
+                <option value="Scooter <125 CC">Hero Xoom 125 (125cc)</option>
+            </optgroup>
+            <optgroup label="Scooters 125-160cc (Performance)">
+                <option value="Scooter <160 CC">TVS Apache RTR 160 (159.7cc)</option>
+                <option value="Scooter <160 CC">Aprilia SR 160 (160cc)</option>
+                <option value="Scooter <160 CC">Yamaha Aerox 155 (155cc)</option>
+            </optgroup>
+        </select>
+
+        <!-- Petrol Vehicles -->
+        <div class="vehicle-section" id="petrol-section">
+            <h3>Petrol Vehicles</h3>
+            <select class="vehicle-select" data-category="Petrol">
+                <option value="">Select Vehicle</option>
+                <optgroup label="Below 1000cc (Entry-Level Hatchbacks)">
+                    <option value="Maruti Suzuki Alto K10">Maruti Suzuki Alto K10</option>
+                    <option value="Maruti Suzuki S-Presso">Maruti Suzuki S-Presso</option>
+                    <option value="Hyundai Santro">Hyundai Santro</option>
+                    <option value="Tata Tiago">Tata Tiago</option>
+                    <option value="Maruti Suzuki Celerio">Maruti Suzuki Celerio</option>
+                    <option value="Datsun GO">Datsun GO</option>
+                    <option value="Datsun GO+">Datsun GO+</option>
+            </optgroup>
+                <optgroup label="1000-1500cc (Compact Cars)">
+                    <option value="Maruti Suzuki Swift">Maruti Suzuki Swift</option>
+                    <option value="Maruti Suzuki Baleno">Maruti Suzuki Baleno</option>
+                    <option value="Maruti Suzuki Dzire">Maruti Suzuki Dzire</option>
+                    <option value="Hyundai i20">Hyundai i20</option>
+                    <option value="Hyundai Grand i10 Nios">Hyundai Grand i10 Nios</option>
+                    <option value="Hyundai Aura">Hyundai Aura</option>
+                    <option value="Tata Altroz">Tata Altroz</option>
+                    <option value="Tata Punch">Tata Punch</option>
+                    <option value="Honda Amaze">Honda Amaze</option>
+                    <option value="Toyota Glanza">Toyota Glanza</option>
+                    <option value="Maruti Suzuki Wagon R">Maruti Suzuki Wagon R</option>
+                    <option value="Maruti Suzuki Ignis">Maruti Suzuki Ignis</option>
+                    <option value="Renault Kwid">Renault Kwid</option>
+                    <option value="Tata Tigor">Tata Tigor</option>
+                    <option value="Maruti Suzuki Fronx">Maruti Suzuki Fronx</option>
+                    <option value="Honda WR-V">Honda WR-V</option>
+                    <option value="Toyota Urban Cruiser">Toyota Urban Cruiser</option>
+                    <option value="Nissan Magnite">Nissan Magnite</option>
+                    <option value="Renault Kiger">Renault Kiger</option>
+                    <option value="Volkswagen Vento">Volkswagen Vento</option>
+                    <option value="Skoda Rapid">Skoda Rapid</option>
+            </optgroup>
+                <optgroup label="1500-2000cc (Mid-Size SUVs)">
+                    <option value="Hyundai Creta">Hyundai Creta</option>
+                    <option value="Hyundai Venue">Hyundai Venue</option>
+                    <option value="Kia Sonet">Kia Sonet</option>
+                    <option value="Kia Seltos">Kia Seltos</option>
+                    <option value="Maruti Suzuki Brezza">Maruti Suzuki Brezza</option>
+                    <option value="Maruti Suzuki Ertiga">Maruti Suzuki Ertiga</option>
+                    <option value="Mahindra XUV300">Mahindra XUV300</option>
+                    <option value="Mahindra Scorpio-N">Mahindra Scorpio-N</option>
+                    <option value="Tata Nexon">Tata Nexon</option>
+                    <option value="Tata Harrier">Tata Harrier</option>
+                    <option value="Honda Elevate">Honda Elevate</option>
+                    <option value="Maruti Suzuki Grand Vitara">Maruti Suzuki Grand Vitara</option>
+                    <option value="Toyota Hyryder">Toyota Hyryder</option>
+                    <option value="MG Astor">MG Astor</option>
+                    <option value="Mahindra Bolero Neo">Mahindra Bolero Neo</option>
+                    <option value="Force Gurkha">Force Gurkha</option>
+            </optgroup>
+                <optgroup label="2000-3000cc (Premium SUVs)">
+                    <option value="Toyota Fortuner">Toyota Fortuner</option>
+                    <option value="Mahindra Thar">Mahindra Thar</option>
+                    <option value="Mahindra XUV700">Mahindra XUV700</option>
+                    <option value="MG Hector">MG Hector</option>
+                    <option value="MG Gloster">MG Gloster</option>
+                    <option value="Jeep Compass">Jeep Compass</option>
+                    <option value="Skoda Kushaq">Skoda Kushaq</option>
+                    <option value="Skoda Slavia">Skoda Slavia</option>
+                    <option value="Isuzu V-Cross">Isuzu V-Cross</option>
+                    <option value="Mahindra Scorpio Classic">Mahindra Scorpio Classic</option>
+                    <option value="Toyota Hilux">Toyota Hilux</option>
+            </optgroup>
+                <optgroup label="3000cc+ (Luxury Vehicles)">
+                    <option value="Mercedes-Benz GLS">Mercedes-Benz GLS</option>
+                    <option value="Mercedes-Benz S-Class">Mercedes-Benz S-Class</option>
+                    <option value="BMW X5">BMW X5</option>
+                    <option value="BMW X7">BMW X7</option>
+                    <option value="Audi Q7">Audi Q7</option>
+                    <option value="Audi A8">Audi A8</option>
+                    <option value="Land Rover Range Rover">Land Rover Range Rover</option>
+                    <option value="Land Rover Defender">Land Rover Defender</option>
+                    <option value="Porsche Cayenne">Porsche Cayenne</option>
+                    <option value="Lexus ES">Lexus ES</option>
+                    <option value="Lexus NX">Lexus NX</option>
+                    <option value="Jaguar F-Pace">Jaguar F-Pace</option>
+            </optgroup>
+            </select>
+        </div>
+
+        <!-- Diesel Vehicles -->
+        <div class="vehicle-section" id="diesel-section">
+            <h3>Diesel Vehicles</h3>
+            <select class="vehicle-select" data-category="Diesel">
+                <option value="">Select Vehicle</option>
+                <optgroup label="Below 1500cc (Compact SUVs)">
+                    <option value="Hyundai Venue">Hyundai Venue</option>
+                    <option value="Kia Sonet">Kia Sonet</option>
+                    <option value="Kia Seltos">Kia Seltos</option>
+                    <option value="Maruti Suzuki Brezza">Maruti Suzuki Brezza</option>
+                    <option value="Tata Nexon">Tata Nexon</option>
+                    <option value="Tata Altroz">Tata Altroz</option>
+                    <option value="Maruti Suzuki Ertiga">Maruti Suzuki Ertiga</option>
+                    <option value="Maruti Suzuki XL6">Maruti Suzuki XL6</option>
+            </optgroup>
+                <optgroup label="1500-2000cc (Mid-Size SUVs)">
+                    <option value="Hyundai Creta">Hyundai Creta</option>
+                    <option value="Mahindra XUV300">Mahindra XUV300</option>
+                    <option value="Mahindra Scorpio-N">Mahindra Scorpio-N</option>
+                    <option value="Tata Harrier">Tata Harrier</option>
+                    <option value="Tata Safari">Tata Safari</option>
+                    <option value="Jeep Compass">Jeep Compass</option>
+                    <option value="Mahindra Bolero">Mahindra Bolero</option>
+                    <option value="Mahindra XUV400">Mahindra XUV400</option>
+                    <option value="Toyota Innova Crysta">Toyota Innova Crysta</option>
+            </optgroup>
+                <optgroup label="2000-3000cc (Premium SUVs)">
+                    <option value="Toyota Fortuner Legender">Toyota Fortuner Legender</option>
+                    <option value="Toyota Fortuner">Toyota Fortuner</option>
+                    <option value="Mahindra Thar">Mahindra Thar</option>
+                    <option value="Mahindra XUV700">Mahindra XUV700</option>
+                    <option value="MG Gloster">MG Gloster</option>
+                    <option value="Land Rover Defender">Land Rover Defender</option>
+                    <option value="Force Gurkha">Force Gurkha</option>
+                    <option value="Isuzu D-Max V-Cross">Isuzu D-Max V-Cross</option>
+                    <option value="Mahindra Alturas G4">Mahindra Alturas G4</option>
+            </optgroup>
+                <optgroup label="3000cc+ (Luxury SUVs)">
+                    <option value="Mercedes-Benz GLS">Mercedes-Benz GLS</option>
+                    <option value="BMW X5">BMW X5</option>
+                    <option value="BMW X7">BMW X7</option>
+                    <option value="Audi Q7">Audi Q7</option>
+                    <option value="Mercedes-Benz GLE">Mercedes-Benz GLE</option>
+                    <option value="Land Rover Discovery">Land Rover Discovery</option>
+                    <option value="Jaguar XF">Jaguar XF</option>
+            </optgroup>
+        </select>
+        </div>
+
+        <!-- Heavy-Duty Vehicles Section -->
+        <h2>Heavy-Duty Vehicles</h2>
+        <select id="heavyDutyVehicles">
+            <option value="" disabled selected>Select Heavy-Duty Vehicle</option>
+            <optgroup label="Trucks">
+                <option value="Pickup Truck Diesel">Tata Ace</option>
+                <option value="Small Truck Diesel">Ashok Leyland Dost</option>
+                <option value="Medium Truck Diesel">Mahindra Bolero Pickup</option>
+                <option value="Heavy Truck Diesel">Eicher Pro 2049</option>
+            </optgroup>
+            <optgroup label="Lorries">
+                <option value="Large Lorry Diesel">Ashok Leyland 3718</option>
+            </optgroup>
+        </select>
+
+        <!-- Three-Wheelers Section -->
+        <h2>Three-Wheelers</h2>
+        <select id="threeWheelers">
+            <option value="" disabled selected>Select Three-Wheeler</option>
+            <optgroup label="Petrol">
+                <option value="Petrol Three-Wheeler">Bajaj RE Compact</option>
+            </optgroup>
+            <optgroup label="Diesel">
+                <option value="Diesel Three-Wheeler">Piaggio Ape Diesel</option>
+            </optgroup>
+            <optgroup label="CNG">
+                <option value="CNG Three-Wheeler">Mahindra Alfa CNG</option>
+            </optgroup>
+        </select>
+
+        <!-- Electric Vehicles Section -->
+        <h2>Electric Vehicles</h2>
+        <select id="electricVehicles">
+            <option value="" disabled selected>Select Electric Vehicle</option>
+            <!-- Electric Two-Wheelers -->
+            <optgroup label="Electric Scooters">
+                <option value="Electric Scooter">Ola S1 Pro (8.5 kW)</option>
+                <option value="Electric Scooter">Ather 450X (6.4 kW)</option>
+                <option value="Electric Scooter">TVS iQube (4.4 kW)</option>
+                <option value="Electric Scooter">Bajaj Chetak (4.1 kW)</option>
+                <option value="Electric Scooter">Hero Vida V1 (6 kW)</option>
+            </optgroup>
+            <optgroup label="Electric Bikes">
+                <option value="Electric Bike">Revolt RV400 (3 kW)</option>
+                <option value="Electric Bike">Tork Kratos R (7.5 kW)</option>
+                <option value="Electric Bike">Ultraviolette F77 (25 kW)</option>
+            </optgroup>
+            <!-- Electric Cars -->
+            <optgroup label="Small EVs 30–40 kWh">
+                <option value="Small EV 30–40 kWh">Tata Nexon EV (30.2 kWh)</option>
+            </optgroup>
+            <optgroup label="Sedan EVs 50–80 kWh">
+                <option value="Sedan EV 50–80 kWh">Hyundai Kona Electric (39.2 kWh)</option>
+            </optgroup>
+            <optgroup label="SUV EVs 80–100 kWh">
+                <option value="SUV EV 80–100 kWh">MG ZS EV (50.3 kWh)</option>
+            </optgroup>
+        </select>
+
+        <!-- Selected Vehicles -->
+        <h3>Selected Vehicles:</h3>
+        <div id="selectedVehiclesList"></div>
+
+        <!-- Save and Navigation Buttons -->
+        <div class="button-container" style="display: flex; flex-direction: column; align-items: center; gap: 15px; margin-top: 20px;">
+            <button id="saveButton">
+                <i class="fas fa-save"></i> Save
+            </button>
+            <button class="arrow-button prev-button" onclick="window.location.href='energy.html'" title="Go to Energy Section">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            <button class="arrow-button" onclick="window.location.href='details.html'" title="Go to Food Section">
+                <i class="fas fa-arrow-right"></i>
+            </button>
+        </div>
+    </div>
+
+    <script>
+    // Array to store selected vehicles
+    let selectedVehicles = [];
+    
+    // Function to add a vehicle to the selected list
+    function addVehicle(vehicleName, vehicleCategory) {
+        // Check if vehicle is already selected
+        const isDuplicate = selectedVehicles.some(v => 
+            v.name === vehicleName && v.category === vehicleCategory
+        );
+        
+        if (!isDuplicate && vehicleName && vehicleCategory) {
+            selectedVehicles.push({ 
+                name: vehicleName, 
+                category: vehicleCategory 
+            });
+            updateSelectedVehiclesList();
+        }
+    }
+    
+    // Function to remove a vehicle from the selected list
+    function removeVehicle(vehicleName, vehicleCategory) {
+        selectedVehicles = selectedVehicles.filter(v => 
+            !(v.name === vehicleName && v.category === vehicleCategory)
+        );
+        updateSelectedVehiclesList();
+    }
+    
+    // Function to update the selected vehicles list
+    function updateSelectedVehiclesList() {
+        const selectedVehiclesList = document.getElementById('selectedVehiclesList');
+        selectedVehiclesList.innerHTML = '';
+    
+        if (selectedVehicles.length === 0) {
+            selectedVehiclesList.innerHTML += '<p>No vehicles selected yet</p>';
+            return;
+        }
+    
+        selectedVehicles.forEach(vehicle => {
+            const vehicleDiv = document.createElement('div');
+            vehicleDiv.className = 'selected-vehicle';
+            vehicleDiv.innerHTML = `
+                <span>${vehicle.name} (${vehicle.category})</span>
+                <button onclick="removeVehicle('${vehicle.name.replace(/'/g, "\\'")}', '${vehicle.category.replace(/'/g, "\\'")}')">Remove</button>
+            `;
+            selectedVehiclesList.appendChild(vehicleDiv);
+        });
+    }
+    
+    // Event listeners for dropdown menus
+    document.querySelectorAll('select').forEach(select => {
+        select.addEventListener('change', (e) => {
+            const selectedOption = e.target.options[e.target.selectedIndex];
+            if (selectedOption.value) {
+                addVehicle(selectedOption.text, selectedOption.value);
+                e.target.value = ''; // Reset the dropdown
+            }
+        });
+    });
+    
+    // Event listener for search results
+    document.getElementById('searchResults').addEventListener('click', (e) => {
+        if (e.target.tagName === 'DIV') {
+            const vehicleName = e.target.textContent;
+            const vehicleCategory = e.target.getAttribute('data-category');
+            addVehicle(vehicleName, vehicleCategory);
+            document.getElementById('searchResults').innerHTML = '';
+            document.getElementById('searchInput').value = '';
+        }
+    });
+    
+    // Save button functionality
+    document.getElementById('saveButton').addEventListener('click', async () => {
+        if (selectedVehicles.length === 0) {
+            alert('Please select at least one vehicle before saving');
+            return;
+        }
+        
+        try {
+            const response = await fetch('/save_vehicles', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ vehicles: selectedVehicles }),
+            });
+    
+            if (response.ok) {
+                alert('Vehicles saved successfully!');
+            } else {
+                alert('Failed to save vehicles.');
+            }
+        } catch (error) {
+            console.error('Error saving vehicles:', error);
+            alert('An error occurred while saving vehicles.');
+        }
+    });
+    
+    // Search functionality
+    document.getElementById('searchButton').addEventListener('click', searchVehicles);
+    document.getElementById('searchInput').addEventListener('keyup', (e) => {
+        if (e.key === 'Enter') searchVehicles();
+    });
+    
+    // Function to search for vehicles
+    function searchVehicles() {
+        const query = document.getElementById('searchInput').value.trim().toLowerCase();
+        const searchResults = document.getElementById('searchResults');
+        searchResults.innerHTML = '';
+    
+        if (query === '') return;
+    
+        // Filter vehicles based on the search query
+        const filteredVehicles = vehicles.filter(vehicle =>
+            vehicle.name.toLowerCase().includes(query) &&
+            !selectedVehicles.some(v => 
+                v.name === vehicle.name && v.category === vehicle.category
+            )
+        );
+    
+        // Display search results
+        if (filteredVehicles.length === 0) {
+            searchResults.innerHTML = '<div>No matching vehicles found</div>';
+            return;
+        }
+    
+        filteredVehicles.forEach(vehicle => {
+            const resultDiv = document.createElement('div');
+            // Display only the vehicle name without category
+            resultDiv.textContent = vehicle.name;
+            resultDiv.setAttribute('data-category', vehicle.category);
+            searchResults.appendChild(resultDiv);
+        });
+    }
+    
+    // Load sved vehicles on page load
+    document.addEventListener('DOMContentLoaded', async () => {
+        try {
+            const response = await fetch('/get_saved_vehicles');
+            if (response.ok) {
+                const data = await response.json();
+                selectedVehicles = data.vehicles.map(v => ({
+                    name: v.vehicle_name,
+                    category: v.vehicle_category
+                }));
+                updateSelectedVehiclesList();
+            }
+        } catch (error) {
+            console.error('Error loading saved vehicles:', error);
+        }
+    });
+
+        // Vehicle data for search functionality
+        const vehicles = [
+            // Petrol Vehicles
+            { name: "Maruti Suzuki Alto K10", category: "Petrol" },
+            { name: "Maruti Suzuki S-Presso", category: "Petrol" },
+            { name: "Hyundai Santro", category: "Petrol" },
+            { name: "Tata Tiago", category: "Petrol" },
+            { name: "Maruti Suzuki Celerio", category: "Petrol" },
+            { name: "Datsun GO", category: "Petrol" },
+            { name: "Datsun GO+", category: "Petrol" },
+            { name: "Maruti Suzuki Swift", category: "Petrol" },
+            { name: "Maruti Suzuki Baleno", category: "Petrol" },
+            { name: "Maruti Suzuki Dzire", category: "Petrol" },
+            { name: "Hyundai i20", category: "Petrol" },
+            { name: "Hyundai Grand i10 Nios", category: "Petrol" },
+            { name: "Hyundai Aura", category: "Petrol" },
+            { name: "Tata Altroz", category: "Petrol" },
+            { name: "Tata Punch", category: "Petrol" },
+            { name: "Honda Amaze", category: "Petrol" },
+            { name: "Toyota Glanza", category: "Petrol" },
+            { name: "Maruti Suzuki Wagon R", category: "Petrol" },
+            { name: "Maruti Suzuki Ignis", category: "Petrol" },
+            { name: "Renault Kwid", category: "Petrol" },
+            { name: "Tata Tigor", category: "Petrol" },
+            { name: "Maruti Suzuki Fronx", category: "Petrol" },
+            { name: "Honda WR-V", category: "Petrol" },
+            { name: "Toyota Urban Cruiser", category: "Petrol" },
+            { name: "Nissan Magnite", category: "Petrol" },
+            { name: "Renault Kiger", category: "Petrol" },
+            { name: "Volkswagen Vento", category: "Petrol" },
+            { name: "Skoda Rapid", category: "Petrol" },
+            { name: "Hyundai Creta", category: "Petrol" },
+            { name: "Hyundai Venue", category: "Petrol" },
+            { name: "Kia Sonet", category: "Petrol" },
+            { name: "Kia Seltos", category: "Petrol" },
+            { name: "Maruti Suzuki Brezza", category: "Petrol" },
+            { name: "Maruti Suzuki Ertiga", category: "Petrol" },
+            { name: "Mahindra XUV300", category: "Petrol" },
+            { name: "Mahindra Scorpio-N", category: "Petrol" },
+            { name: "Tata Nexon", category: "Petrol" },
+            { name: "Tata Harrier", category: "Petrol" },
+            { name: "Honda Elevate", category: "Petrol" },
+            { name: "Maruti Suzuki Grand Vitara", category: "Petrol" },
+            { name: "Toyota Hyryder", category: "Petrol" },
+            { name: "MG Astor", category: "Petrol" },
+            { name: "Mahindra Bolero Neo", category: "Petrol" },
+            { name: "Force Gurkha", category: "Petrol" },
+            { name: "Toyota Fortuner", category: "Petrol" },
+            { name: "Mahindra Thar", category: "Petrol" },
+            { name: "Mahindra XUV700", category: "Petrol" },
+            { name: "MG Hector", category: "Petrol" },
+            { name: "MG Gloster", category: "Petrol" },
+            { name: "Jeep Compass", category: "Petrol" },
+            { name: "Skoda Kushaq", category: "Petrol" },
+            { name: "Skoda Slavia", category: "Petrol" },
+            { name: "Isuzu V-Cross", category: "Petrol" },
+            { name: "Mahindra Scorpio Classic", category: "Petrol" },
+            { name: "Toyota Hilux", category: "Petrol" },
+            { name: "Mercedes-Benz GLS", category: "Petrol" },
+            { name: "Mercedes-Benz S-Class", category: "Petrol" },
+            { name: "BMW X5", category: "Petrol" },
+            { name: "BMW X7", category: "Petrol" },
+            { name: "Audi Q7", category: "Petrol" },
+            { name: "Audi A8", category: "Petrol" },
+            { name: "Land Rover Range Rover", category: "Petrol" },
+            { name: "Land Rover Defender", category: "Petrol" },
+            { name: "Porsche Cayenne", category: "Petrol" },
+            { name: "Lexus ES", category: "Petrol" },
+            { name: "Lexus NX", category: "Petrol" },
+            { name: "Jaguar F-Pace", category: "Petrol" },
+
+            // Diesel Vehicles
+            { name: "Hyundai Venue", category: "Diesel" },
+            { name: "Kia Sonet", category: "Diesel" },
+            { name: "Kia Seltos", category: "Diesel" },
+            { name: "Maruti Suzuki Brezza", category: "Diesel" },
+            { name: "Tata Nexon", category: "Diesel" },
+            { name: "Tata Altroz", category: "Diesel" },
+            { name: "Maruti Suzuki Ertiga", category: "Diesel" },
+            { name: "Maruti Suzuki XL6", category: "Diesel" },
+            { name: "Hyundai Creta", category: "Diesel" },
+            { name: "Mahindra XUV300", category: "Diesel" },
+            { name: "Mahindra Scorpio-N", category: "Diesel" },
+            { name: "Tata Harrier", category: "Diesel" },
+            { name: "Tata Safari", category: "Diesel" },
+            { name: "Jeep Compass", category: "Diesel" },
+            { name: "Mahindra Bolero", category: "Diesel" },
+            { name: "Mahindra XUV400", category: "Diesel" },
+            { name: "Toyota Innova Crysta", category: "Diesel" },
+            { name: "Toyota Fortuner Legender", category: "Diesel" },
+            { name: "Toyota Fortuner", category: "Diesel" },
+            { name: "Mahindra Thar", category: "Diesel" },
+            { name: "Mahindra XUV700", category: "Diesel" },
+            { name: "MG Gloster", category: "Diesel" },
+            { name: "Land Rover Defender", category: "Diesel" },
+            { name: "Force Gurkha", category: "Diesel" },
+            { name: "Isuzu D-Max V-Cross", category: "Diesel" },
+            { name: "Mahindra Alturas G4", category: "Diesel" },
+            { name: "Mercedes-Benz GLS", category: "Diesel" },
+            { name: "BMW X5", category: "Diesel" },
+            { name: "BMW X7", category: "Diesel" },
+            { name: "Audi Q7", category: "Diesel" },
+            { name: "Mercedes-Benz GLE", category: "Diesel" },
+            { name: "Land Rover Discovery", category: "Diesel" },
+            { name: "Jaguar XF", category: "Diesel" },
+
+            // Existing categories
+            { name: "Honda Activa 110", category: "Scooter <110 CC" },
+            { name: "TVS Jupiter", category: "Scooter <110 CC" },
+            { name: "Suzuki Access 125", category: "Scooter <150 CC" },
+            { name: "Bajaj Platina 100", category: "Motorcycle <100 CC" },
+            { name: "Hero Splendor Plus", category: "Motorcycle <125 CC" },
+            { name: "TVS Apache RTR 160", category: "Motorcycle <135 CC" },
+            { name: "Royal Enfield Classic 350", category: "Motorcycle <200 CC" },
+            { name: "KTM Duke 390", category: "Motorcycle <300 CC" },
+            { name: "Harley-Davidson Street 750", category: "Motorcycle <500 CC" },
+            { name: "Tata Nexon EV", category: "Small EV 30–40 kWh" },
+            { name: "Hyundai Kona Electric", category: "Sedan EV 50–80 kWh" },
+            { name: "MG ZS EV", category: "SUV EV 80–100 kWh" },
+            // Electric Vehicles
+            { name: "Ola S1 Pro", category: "Electric Scooter" },
+            { name: "Ather 450X", category: "Electric Scooter" },
+            { name: "TVS iQube", category: "Electric Scooter" },
+            { name: "Bajaj Chetak", category: "Electric Scooter" },
+            { name: "Hero Vida V1", category: "Electric Scooter" },
+            { name: "Revolt RV400", category: "Electric Bike" },
+            { name: "Tork Kratos R", category: "Electric Bike" },
+            { name: "Ultraviolette F77", category: "Electric Bike" },
+            // Add missing vehicles for search
+            { name: "Java Jawa 42", category: "Motorcycle <250 CC" },
+            { name: "Java Perak", category: "Motorcycle <250 CC" },
+            { name: "Bajaj Dominar 250", category: "Motorcycle <250 CC" },
+            { name: "Bajaj Dominar 400", category: "Motorcycle <500 CC" },
+            { name: "KTM 250 Duke", category: "Motorcycle <500 CC" },
+            { name: "KTM 390 Duke", category: "Motorcycle <500 CC" },
+            { name: "Royal Enfield Classic 350", category: "Motorcycle <500 CC" },
+            { name: "Royal Enfield Himalayan 450", category: "Motorcycle <500 CC" },
+            { name: "Honda CB300R", category: "Motorcycle <500 CC" },
+            { name: "Royal Enfield Bullet 350", category: "Motorcycle <500 CC" },
+            { name: "Royal Enfield Super Meteor 650", category: "Motorcycle 500cc+" },
+            { name: "KTM 390 Adventure", category: "Motorcycle 500cc+" },
+            { name: "BMW G 310 R", category: "Motorcycle 500cc+" },
+            { name: "Kawasaki Ninja 300", category: "Motorcycle 500cc+" },
+            { name: "Kawasaki Ninja 650", category: "Motorcycle 500cc+" },
+            { name: "Triumph Speed 400", category: "Motorcycle 500cc+" },
+            { name: "Royal Enfield Interceptor 650", category: "Motorcycle 500cc+" },
+            { name: "Aprilia SR 160", category: "Scooter <160 CC" },
+            // Add all missing vehicles from dropdowns
+            // Entry-Level Commuters (75-110cc)
+            { name: "Bajaj CT 100", category: "Motorcycle <110 CC" },
+            { name: "Bajaj Platina 100", category: "Motorcycle <110 CC" },
+            { name: "Hero HF Deluxe", category: "Motorcycle <110 CC" },
+            { name: "Hero Splendor Plus", category: "Motorcycle <110 CC" },
+            { name: "Honda CD 110 Dream", category: "Motorcycle <110 CC" },
+            { name: "TVS Sport", category: "Motorcycle <110 CC" },
+            { name: "Hero Splendor iSmart 110", category: "Motorcycle <110 CC" },
+            { name: "Hero Passion Pro", category: "Motorcycle <110 CC" },
+            { name: "Hero Passion XPro", category: "Motorcycle <110 CC" },
+            { name: "Honda Livo", category: "Motorcycle <110 CC" },
+            { name: "TVS Radeon", category: "Motorcycle <110 CC" },
+            { name: "TVS Star City Plus", category: "Motorcycle <110 CC" },
+            // Economy Commuters (110-125cc)
+            { name: "Bajaj Pulsar 125", category: "Motorcycle <125 CC" },
+            { name: "Hero Glamour", category: "Motorcycle <125 CC" },
+            { name: "Honda Shine", category: "Motorcycle <125 CC" },
+            { name: "TVS Raider 125", category: "Motorcycle <125 CC" },
+            { name: "Yamaha Saluto 125", category: "Motorcycle <125 CC" },
+            { name: "Hero Super Splendor", category: "Motorcycle <125 CC" },
+            { name: "Hero Xtreme 125R", category: "Motorcycle <125 CC" },
+            { name: "Bajaj Discover 125", category: "Motorcycle <125 CC" },
+            { name: "Honda SP 125", category: "Motorcycle <125 CC" },
+            { name: "TVS Apache RTR 125", category: "Motorcycle <125 CC" },
+            // Performance Commuters (125-150cc)
+            { name: "Bajaj Pulsar 150", category: "Motorcycle <150 CC" },
+            { name: "Hero Xtreme 160R", category: "Motorcycle <150 CC" },
+            { name: "Honda Unicorn", category: "Motorcycle <150 CC" },
+            { name: "Yamaha FZ-S FI", category: "Motorcycle <150 CC" },
+            { name: "Hero Achiever", category: "Motorcycle <150 CC" },
+            { name: "Bajaj Pulsar NS125", category: "Motorcycle <150 CC" },
+            { name: "Honda CB Hornet 160R", category: "Motorcycle <150 CC" },
+            { name: "TVS Apache RTR 160 4V", category: "Motorcycle <150 CC" },
+            // Premium Bikes (150-250cc)
+            { name: "Bajaj Pulsar NS160", category: "Motorcycle <250 CC" },
+            { name: "Bajaj Pulsar NS200", category: "Motorcycle <250 CC" },
+            { name: "KTM 200 Duke", category: "Motorcycle <250 CC" },
+            { name: "Royal Enfield Hunter 350", category: "Motorcycle <250 CC" },
+            { name: "TVS Apache RTR 200 4V", category: "Motorcycle <250 CC" },
+            { name: "Yamaha R15 V4", category: "Motorcycle <250 CC" },
+            { name: "Hero Xpulse 200", category: "Motorcycle <250 CC" },
+            { name: "KTM 125 Duke", category: "Motorcycle <250 CC" },
+            // Entry-Level Scooters
+            { name: "TVS Jupiter", category: "Scooter <110 CC" },
+            { name: "Honda Activa 6G", category: "Scooter <110 CC" },
+            { name: "Hero Pleasure Plus", category: "Scooter <110 CC" },
+            // Premium Scooters
+            { name: "Honda Activa 125", category: "Scooter <125 CC" },
+            { name: "TVS NTORQ 125", category: "Scooter <125 CC" },
+            { name: "Yamaha Fascino 125", category: "Scooter <125 CC" },
+            { name: "Hero Xoom 125", category: "Scooter <125 CC" },
+            // Performance Scooters
+            { name: "Yamaha Aerox 155", category: "Scooter <160 CC" },
+            // Heavy-Duty Vehicles
+            { name: "Tata Ace", category: "Pickup Truck Diesel" },
+            { name: "Ashok Leyland Dost", category: "Small Truck Diesel" },
+            { name: "Mahindra Bolero Pickup", category: "Medium Truck Diesel" },
+            { name: "Eicher Pro 2049", category: "Heavy Truck Diesel" },
+            { name: "Ashok Leyland 3718", category: "Large Lorry Diesel" },
+            // Three-Wheelers
+            { name: "Bajaj RE Compact", category: "Petrol Three-Wheeler" },
+            { name: "Piaggio Ape Diesel", category: "Diesel Three-Wheeler" },
+            { name: "Mahindra Alfa CNG", category: "CNG Three-Wheeler" }
+        ];
+
+        // Logout function
+function logout() {
+                // Send logout request to server
+                fetch('/logout', {
+                    method: 'POST',
+                    credentials: 'same-origin' // Include cookies if needed
+                })
+                .then(response => {
+                    if (response.ok) {
+                        // Redirect to login page after successful logout
+                        window.location.href = '/login.html';
+                    } else {
+                        throw new Error('Logout failed');
+                    }
+                })
+                .catch(error => {
+                    console.error('Logout error:', error);
+                    alert('Logout failed. Please try again.');
+                });
+            }
+    </script>
+</body>
+</html>

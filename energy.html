@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Energy Section</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Montserrat', sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #e6f2ed, #c1dacc);
+            color: #333;
+            min-height: 100vh;
+            box-sizing: border-box;
+        }
+
+        /* Navigation Bar */
+        nav {
+            background: linear-gradient(135deg, #2e8b57, #3cb371);
+            padding: 15px 0;
+            margin: -20px -20px 30px -20px;
+        }
+
+        nav > div {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .logo {
+            color: white;
+            text-decoration: none;
+            font-size: 1.2rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: background-color 0.3s;
+            font-weight: 500;
+        }
+
+        nav a:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .logout-button {
+            background-color: rgba(255, 255, 255, 0.15);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 500;
+            margin: 0;
+            width: auto;
+        }
+
+        .logout-button:hover {
+            background-color: rgba(255, 255, 255, 0.25);
+        }
+
+        /* Section Styling */
+        .section {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 8px 32px rgba(46, 139, 87, 0.1);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+
+        /* Headings */
+        h1, h2 {
+            font-family: 'Montserrat', sans-serif;
+            color: #2e8b57;
+            margin-bottom: 20px;
+            font-weight: 600;
+            border-bottom: 2px solid rgba(46, 139, 87, 0.1);
+            padding-bottom: 10px;
+        }
+
+        h2 {
+            font-size: 1.4rem;
+        }
+
+        /* Device Section */
+        .device-section {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        /* Device Item */
+        .device-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: white;
+            border: 1px solid rgba(46, 139, 87, 0.1);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .device-item img {
+            width: 50px;
+            height: 50px;
+            border-radius: 8px;
+        }
+
+        .device-item span {
+            font-size: 1rem;
+            color: #333;
+            font-weight: 500;
+        }
+
+        /* Hover Effect */
+        .device-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(46, 139, 87, 0.15);
+            border-color: #2e8b57;
+        }
+
+        /* Other Button */
+        #otherButton {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 25px;
+            background: linear-gradient(135deg, #2e8b57, #3cb371);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            font-family: 'Montserrat', sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        #otherButton:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(46, 139, 87, 0.3);
+        }
+
+        /* Form Styling */
+        #otherDeviceForm {
+            margin-top: 20px;
+            display: none;
+            background: white;
+            padding: 20px;
+            border: 1px solid rgba(46, 139, 87, 0.1);
+            border-radius: 12px;
+            position: relative;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        #otherDeviceForm label {
+            font-size: 0.95rem;
+            color: #2e8b57;
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        #otherDeviceForm input {
+            padding: 12px;
+            font-size: 1rem;
+            width: 100%;
+            margin-bottom: 15px;
+            border: 1px solid rgba(46, 139, 87, 0.2);
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-family: 'Montserrat', sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        #otherDeviceForm input:focus {
+            outline: none;
+            border-color: #2e8b57;
+            box-shadow: 0 0 0 2px rgba(46, 139, 87, 0.1);
+        }
+
+        #suggestionsContainer {
+            position: absolute;
+            background: white;
+            border: 1px solid rgba(46, 139, 87, 0.2);
+            border-radius: 8px;
+            width: calc(100% - 40px);
+            max-width: 100%;
+            z-index: 2;
+            display: none;
+            margin-top: -10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .suggestion-item {
+            padding: 10px 15px;
+            cursor: pointer;
+            border-bottom: 1px solid rgba(46, 139, 87, 0.1);
+            transition: background-color 0.3s ease;
+        }
+
+        .suggestion-item:hover {
+            background-color: rgba(46, 139, 87, 0.05);
+        }
+
+        #addCustomDevice {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 25px;
+            background: linear-gradient(135deg, #2e8b57, #3cb371);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            font-family: 'Montserrat', sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        #addCustomDevice:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(46, 139, 87, 0.3);
+        }
+
+        /* Selected Devices List */
+        #selectedDevicesList {
+            margin-top: 25px;
+        }
+
+        #selectedDevicesList div {
+            margin-bottom: 15px;
+            padding: 15px;
+            border: 1px solid rgba(46, 139, 87, 0.1);
+            border-radius: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: white;
+            transition: all 0.3s ease;
+        }
+
+        #selectedDevicesList div:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(46, 139, 87, 0.1);
+        }
+
+        #selectedDevicesList button {
+            padding: 8px 16px;
+            background: linear-gradient(135deg, #ff6b6b, #ee5253);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            font-family: 'Montserrat', sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        #selectedDevicesList button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 107, 107, 0.3);
+        }
+
+        /* Arrow Button Styling */
+        .arrow-button {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: linear-gradient(135deg, #2e8b57, #3cb371);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 24px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(46, 139, 87, 0.3);
+            transition: all 0.3s ease;
+            z-index: 2;
+        }
+
+        .arrow-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(46, 139, 87, 0.4);
+        }
+
+        .prev-button {
+            right: auto;
+            left: 30px;
+        }
+
+        /* TV Selection Section */
+        .tv-selection {
+            grid-column: 1 / -1;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        /* AC Section Headers */
+        .ac-header {
+            grid-column: 1 / -1;
+            margin-top: 20px;
+            color: #2e8b57;
+            font-size: 1.2rem;
+            font-weight: 500;
+        }
+
+        @media (max-width: 992px) {
+            .device-section {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
+            .section {
+                padding: 20px;
+            }
+
+            .device-section {
+                grid-template-columns: 1fr;
+            }
+
+            .tv-selection {
+                grid-template-columns: 1fr;
+            }
+
+            nav > div {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .nav-links {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            nav a {
+                width: 100%;
+                text-align: center;
+            }
+
+            .logout-button {
+                width: 100%;
+            }
+
+            .arrow-button {
+                bottom: 20px;
+                right: 20px;
+            }
+
+            .prev-button {
+                right: auto;
+                left: 20px;
+            }
+        }
+
+        /* Save Button Styling */
+        #saveButton {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 30px;
+            background: linear-gradient(135deg, #2e8b57, #3cb371);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            font-family: 'Montserrat', sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        #saveButton:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(46, 139, 87, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav>
+        <div>
+            <a href="/main.html" class="logo">
+                <i class="fas fa-leaf"></i>
+                Daily Carbon Calculator
+            </a>
+            <div class="nav-links">
+                <a href="/report.html">
+                    <i class="fas fa-chart-bar"></i>
+                    Report
+                </a>
+                <a href="/main.html">
+                    <i class="fas fa-home"></i>
+                    Main
+                </a>
+                <a href="/profile.html">
+                    <i class="fas fa-user"></i>
+                    Profile
+                </a>
+                <button class="logout-button" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i>
+                    Logout
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Energy Section -->
+    <div class="section">
+        <h1>Energy Section</h1>
+
+        <!-- Bulbs Section -->
+        <h2>Bulbs</h2>
+        <div class="device-section">
+            <div class="device-item" data-device="Incandescent Bulb">
+                <img src="https://storage.googleapis.com/a1aa/image/OQFWN7OwYmZS0SpIQbK6PdgISJbgoPZIQZA0ooK7GCE.jpg" alt="Incandescent Bulb" />
+                <span>Incandescent Bulb</span>
+            </div>
+            <div class="device-item" data-device="CFL Bulb">
+                <img src="https://storage.googleapis.com/a1aa/image/j2ZDyaF2jxVK9QaLb7f8MZ0v6CbkG2_T-pi8OFgpE_I.jpg" alt="CFL Bulb" />
+                <span>CFL Bulb</span>
+            </div>
+            <div class="device-item" data-device="LED Bulb">
+                <img src="https://storage.googleapis.com/a1aa/image/bQjpcg5OkZkCdPgDHLO3yVuggxrBJa4FdEIsexomWeg.jpg" alt="LED Bulb" />
+                <span>LED Bulb</span>
+            </div>
+            <div class="device-item" data-device="Fluorescent Tube Light">
+                <img src="https://storage.googleapis.com/a1aa/image/OdafdjwDl7ZvNcjAj9kdReOnR_khC59qqJWPNrCLOVw.jpg" alt="Fluorescent Tube Light" />
+                <span>Fluorescent Tube Light</span>
+            </div>
+            <div class="device-item" data-device="LED Tube Light">
+                <img src="https://storage.googleapis.com/a1aa/image/1YA2tqc8zFnIhiGxqDawBoHnX0yKMT1CX0yEf1YnmKg.jpg" alt="LED Tube Light" />
+                <span>LED Tube Light</span>
+            </div>
+        </div>
+
+        <!-- Fans Section -->
+        <h2>Fans</h2>
+        <div class="device-section">
+            <div class="device-item" data-device="Conventional Ceiling Fan">
+                <img src="https://storage.googleapis.com/a1aa/image/eWdcMWXYKDvoVHo1KAasH_Qti7fjkIYr3BeNZgqkEks.jpg" alt="Conventional Ceiling Fan" />
+                <span>Conventional Ceiling Fan</span>
+            </div>
+            <div class="device-item" data-device="BLDC Ceiling Fan">
+                <img src="https://storage.googleapis.com/a1aa/image/xkxTNtxIMZhSgFM4OxqIbx-IOrQtoV0XL6K_AbhN2k4.jpg" alt="BLDC Ceiling Fan" />
+                <span>BLDC Ceiling Fan</span>
+            </div>
+            <div class="device-item" data-device="Wall Fan">
+                <img src="https://storage.googleapis.com/a1aa/image/hWt-Lrs75mE-qo0l3W1UCRm1tPMqzvVV3GRuMgQmxLo.jpg" alt="Wall Fan" />
+                <span>Wall Fan</span>
+            </div>
+            <div class="device-item" data-device="Table Fan">
+                <img src="https://storage.googleapis.com/a1aa/image/aNTkzqWo07jM1lL7aVa--OCFKTB1Be3_6V5wDqVMrQs.jpg" alt="Table Fan" />
+                <span>Table Fan</span>
+            </div>
+        </div>
+
+        <!-- Washing Machines Section -->
+        <h2>Washing Machines</h2>
+        <div class="device-section">
+            <div class="device-item" data-device="Manual Washing Machine">
+                <img src="https://storage.googleapis.com/a1aa/image/zPBvg1QEYR7urKcGStpGJPMgOyQIBekRB6cI9LvEQ-w.jpg" alt="Manual Washing Machine" />
+                <span>Manual Washing Machine</span>
+            </div>
+            <div class="device-item" data-device="Top Load Washing Machine">
+                <img src="https://storage.googleapis.com/a1aa/image/PiPCYCUhmSxe2sSdH9xcs2hfYPxuDsj8E6fHZiB6Z5Q.jpg" alt="Top Load Washing Machine" />
+                <span>Top Load Washing Machine</span>
+            </div>
+            <div class="device-item" data-device="Front Load Washing Machine">
+                <img src="https://storage.googleapis.com/a1aa/image/jQgSga8im4RZWKQoFM0wPn5GcERybWnwX1eTyeXBoOI.jpg" alt="Front Load Washing Machine" />
+                <span>Front Load Washing Machine</span>
+            </div>
+        </div>
+
+        <!-- Televisions Section -->
+        <h2>Televisions</h2>
+        <div class="device-section">
+            <div class="tv-selection">
+                <div>
+                    <label for="tvType">Select TV Type:</label>
+                    <select id="tvType">
+                        <option value="" disabled selected>Select TV Type</option>
+                        <option value="Plasma">Plasma</option>
+                        <option value="LED">LED</option>
+                        <option value="LCD">LCD</option>
+                    </select>
+                </div>
+
+                <div id="tvSizeSelection" style="display: none;">
+                    <label for="tvSize">Select Screen Size:</label>
+                    <select id="tvSize">
+                        <option value="" disabled selected>Select Screen Size</option>
+                        <option value="15">15 inches</option>
+                        <option value="17">17 inches</option>
+                        <option value="19">19 inches</option>
+                        <option value="24">24 inches</option>
+                        <option value="30">30 inches</option>
+                        <option value="32">32 inches</option>
+                        <option value="37">37 inches</option>
+                        <option value="42">42 inches</option>
+                        <option value="50">50 inches</option>
+                    </select>
+                    <button type="button" id="addTV">Add TV</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Air Conditioners Section -->
+        <h2>Air Conditioners</h2>
+        <div class="device-section">
+            <div class="ac-header">Normal ACs</div>
+            <div class="device-item" data-device="0 Star Normal AC">
+                <span>0 Star Normal AC</span>
+            </div>
+            <div class="device-item" data-device="1 Star Normal AC">
+                <span>1 Star Normal AC</span>
+            </div>
+            <div class="device-item" data-device="2 Star Normal AC">
+                <span>2 Star Normal AC</span>
+            </div>
+            <div class="device-item" data-device="3 Star Normal AC">
+                <span>3 Star Normal AC</span>
+            </div>
+            <div class="device-item" data-device="4 Star Normal AC">
+                <span>4 Star Normal AC</span>
+            </div>
+            <div class="device-item" data-device="5 Star Normal AC">
+                <span>5 Star Normal AC</span>
+            </div>
+
+            <div class="ac-header">Inverter ACs</div>
+            <div class="device-item" data-device="0 Star Inverter AC">
+                <span>0 Star Inverter AC</span>
+            </div>
+            <div class="device-item" data-device="1 Star Inverter AC">
+                <span>1 Star Inverter AC</span>
+            </div>
+            <div class="device-item" data-device="2 Star Inverter AC">
+                <span>2 Star Inverter AC</span>
+            </div>
+            <div class="device-item" data-device="3 Star Inverter AC">
+                <span>3 Star Inverter AC</span>
+            </div>
+            <div class="device-item" data-device="4 Star Inverter AC">
+                <span>4 Star Inverter AC</span>
+            </div>
+            <div class="device-item" data-device="5 Star Inverter AC">
+                <span>5 Star Inverter AC</span>
+            </div>
+        </div>
+
+        <!-- Refrigerators Section -->
+        <h2>Refrigerators</h2>
+        <div class="device-section">
+            <div class="device-item" data-device="No Star Refrigerator">
+                <span>No Star Refrigerator</span>
+            </div>
+            <div class="device-item" data-device="1 Star Refrigerator">
+                <span>1 Star Refrigerator</span>
+            </div>
+            <div class="device-item" data-device="2 Star Refrigerator">
+                <span>2 Star Refrigerator</span>
+            </div>
+            <div class="device-item" data-device="3 Star Refrigerator">
+                <span>3 Star Refrigerator</span>
+            </div>
+            <div class="device-item" data-device="4 Star Refrigerator">
+                <span>4 Star Refrigerator</span>
+            </div>
+            <div class="device-item" data-device="5 Star Refrigerator">
+                <span>5 Star Refrigerator</span>
+            </div>
+        </div>
+
+        <!-- Inverters Section -->
+        <h2>Inverters</h2>
+        <div class="device-section">
+            <div class="device-item" data-device="600 VA Inverter">
+                <img src="https://storage.googleapis.com/a1aa/image/x_BoXmGBfaZQPfuxu3BmhWNPtzPZZ7nQ2EWBU023wgU.jpg" alt="600 VA Inverter" />
+                <span>600 VA Inverter</span>
+            </div>
+            <div class="device-item" data-device="800 VA Inverter">
+                <img src="https://storage.googleapis.com/a1aa/image/Hu7-xJMH55ScSIXgp358fFJA5Hp5KFI5AHiPk00QZVQ.jpg" alt="800 VA Inverter" />
+                <span>800 VA Inverter</span>
+            </div>
+            <div class="device-item" data-device="1000 VA Inverter">
+                <img src="https://storage.googleapis.com/a1aa/image/jKHVqPg_xRm6pVPnSkvloJ6Ty1F_qAEprtMfAGKo_vY.jpg" alt="1000 VA Inverter" />
+                <span>1000 VA Inverter</span>
+            </div>
+            <div class="device-item" data-device="1500 VA Inverter">
+                <img src="https://storage.googleapis.com/a1aa/image/_QYtIMPr3HNGa-aNZl2QOqnJuysvrjPXvAx8LD6Nxcc.jpg" alt="1500 VA Inverter" />
+                <span>1500 VA Inverter</span>
+            </div>
+        </div>
+
+        <!-- Other Appliances Section -->
+        <h2>Other Appliances</h2>
+        <div class="device-section">
+            <div class="device-item" data-device="Microwave Oven">
+                <img src="https://storage.googleapis.com/a1aa/image/Mi6-yFVFAfxmDCBiU1z4WfNQb0fd_Mp2vH6-Zjnllds.jpg" alt="Microwave Oven" />
+                <span>Microwave Oven</span>
+            </div>
+            <div class="device-item" data-device="Desktop Computer">
+                <img src="https://storage.googleapis.com/a1aa/image/ZY9-9lQdOHxcT0EXL5c9VDIhih6_UQogiVZfsVdU6GY.jpg" alt="Desktop Computer" />
+                <span>Desktop Computer</span>
+            </div>
+            <div class="device-item" data-device="Laptop Charging">
+                <img src="https://storage.googleapis.com/a1aa/image/xJ3_MXPql6i4rx-mlca2tX4hJzQiNtV75TTuK7Eq2ow.jpg" alt="Laptop Charging" />
+                <span>Laptop Charging</span>
+            </div>
+            <div class="device-item" data-device="Phone Charging">
+                <img src="https://storage.googleapis.com/a1aa/image/OhhK6qJP4IdNGJgqPHyoFwwmyNcqEbQgzsBOtHAqalo.jpg" alt="Phone Charging" />
+                <span>Phone Charging</span>
+            </div>
+            <div class="device-item" data-device="Juicer Machine">
+                <img src="https://storage.googleapis.com/a1aa/image/mUd_Wl2hX0E1qDW4EKF3PbKCj1zdkBHK0d--reh1fps.jpg" alt="Juicer Machine" />
+                <span>Juicer Machine</span>
+            </div>
+            <div class="device-item" data-device="Iron Box">
+                <img src="https://storage.googleapis.com/a1aa/image/tb8J_VB2e83xXAe0oo8Mbw9dg7v3adlMW6A2U-ysN34.jpg" alt="Iron Box" />
+                <span>Iron Box</span>
+            </div>
+            <div class="device-item" data-device="LPG Stove">
+                <img src="https://storage.googleapis.com/a1aa/image/_IXYQS9PaE_xz9IKDHxFWreHdTYwlWDcHJmO0l5scHc.jpg" alt="LPG Stove" />
+                <span>LPG Stove</span>
+            </div>
+        </div>
+
+         <!-- "Other" Button -->
+         <button id="otherButton">Other</button>
+         <div id="otherDeviceForm">
+             <h3>Add Other Device</h3>
+             <div class="input-container">
+                 <label for="customDeviceName">Device Name:</label>
+                 <input type="text" id="customDeviceName" placeholder="Enter device name" />
+                 <div id="suggestionsContainer"></div>
+             </div>
+             <button type="button" id="addCustomDevice">Add Device</button>
+         </div>
+        <!-- Selected Devices -->
+        <h3>Selected Devices:</h3>
+        <div id="selectedDevicesList"></div>
+
+        <!-- Save and Navigation Buttons -->
+        <div class="button-container" style="display: flex; flex-direction: column; align-items: center; gap: 15px; margin-top: 20px;">
+            <button id="saveButton">
+                <i class="fas fa-save"></i> Save
+            </button>
+            <button class="arrow-button prev-button" onclick="window.location.href='details.html'" title="Go to Details Section">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            <button class="arrow-button" onclick="window.location.href='travel.html'" title="Go to Travel Section">
+                <i class="fas fa-arrow-right"></i>
+            </button>
+        </div>
+    </div>
+
+    <script>
+    // Emission data from the provided table (IMG-20250314-WA0103.jpg)
+    const predefinedDeviceEmissions = {
+        "Incandescent Bulb": 0.0285,
+        "CFL Bulb": 0.0071,
+        "LED Bulb": 0.0048,
+        "Fluorescent Tube Light": 0.019,
+        "LED Tube Light": 0.0095,
+        "Conventional Ceiling Fan": 0.0356,
+        "BLDC Ceiling Fan": 0.0166,
+        "Wall Fan": 0.0238,
+        "Table Fan": 0.0285,
+        "Manual Washing Machine": 0.095,
+        "Top Load Washing Machine": 0.2375,
+        "Front Load Washing Machine": 0.570,
+        "0 Star Normal AC": 0.855,
+        "1 Star Normal AC": 0.76,
+        "2 Star Normal AC": 0.665,
+        "3 Star Normal AC": 0.57,
+        "4 Star Normal AC": 0.475,
+        "5 Star Normal AC": 0.38,
+        "0 Star Inverter AC": 0.7125,
+        "1 Star Inverter AC": 0.6175,
+        "2 Star Inverter AC": 0.5225,
+        "3 Star Inverter AC": 0.4275,
+        "4 Star Inverter AC": 0.3325,
+        "5 Star Inverter AC": 0.2375,
+        "No Star Refrigerator": 0.0597,
+        "1 Star Refrigerator": 0.0529,
+        "2 Star Refrigerator": 0.0424,
+        "3 Star Refrigerator": 0.0339,
+        "4 Star Refrigerator": 0.0272,
+        "5 Star Refrigerator": 0.0217,
+        "600 VA Inverter": 0.228,
+        "800 VA Inverter": 0.304,
+        "1000 VA Inverter": 0.38,
+        "1500 VA Inverter": 0.57,
+        "Microwave Oven": 0.285,
+        "Desktop Computer": 0.095,
+        "Laptop Charging": 0.0285,
+        "Phone Charging": 0.0095,
+        "Juicer Machine": 0.07125,
+        "Iron Box": 0.2375,
+        "LPG Stove": 0.2682,
+        "Hair Dryer": 0.178,
+        "Induction Cooktop": 0.475,
+        "Electric Kettle": 0.171,
+        "Blender": 0.0475,
+        "Kitchen Hood (Chimney)": 0.11875,
+        "Vacuum Cleaner": 0.285,
+        "Dishwasher": 1.06875,
+        "Coffee Machine": 0.095,
+        "Water Purifier": 0.04275,
+        "Air Cooler": 0.76,
+        "Air Fryer": 0.35625,
+        "Water Heater": 2.46,
+        "Room Heater": 2.05,
+        "Toaster": 0.98,
+        "Air Purifier": 0.41,
+        "Hair Straightener": 0.082,
+        "Hair Curler": 0.066
+    };
+
+    // Default emission value for unknown devices (kg CO₂ per hour)
+    const DEFAULT_EMISSION_VALUE = 0.2370;
+
+    // Create a normalized version of device names for matching
+    const normalizedDeviceNames = {};
+    Object.keys(predefinedDeviceEmissions).forEach(device => {
+        const normalized = device.toLowerCase().replace(/\s+/g, '');
+        normalizedDeviceNames[normalized] = device; // Map to original name
+    });
+
+    // Array to store selected devices
+    let selectedDevices = [];
+    let userId = null;
+
+
+    // Function to add a device to the selected list
+    function addDevice(deviceName) {
+        if (!selectedDevices.includes(deviceName)) {
+            selectedDevices.push(deviceName);
+            updateSelectedDevicesList();
+        }
+    }
+
+    // Function to remove a device from the selected list
+    function removeDevice(deviceName) {
+        selectedDevices = selectedDevices.filter(device => device !== deviceName);
+        updateSelectedDevicesList();
+    }
+
+    // Function to update the selected devices list
+    function updateSelectedDevicesList() {
+        const selectedDevicesList = document.getElementById('selectedDevicesList');
+        selectedDevicesList.innerHTML = '';
+        
+        selectedDevices.forEach(device => {
+            const deviceDiv = document.createElement('div');
+            deviceDiv.innerHTML = `
+                <span>${device}</span>
+                <button onclick="removeDevice('${device}')">Remove</button>
+            `;
+            selectedDevicesList.appendChild(deviceDiv);
+        });
+    }
+
+    // Function to show autocomplete suggestions
+    function showSuggestions(suggestions) {
+        const suggestionsContainer = document.getElementById('suggestionsContainer');
+        suggestionsContainer.innerHTML = '';
+        
+        if (suggestions.length === 0) {
+            suggestionsContainer.style.display = 'none';
+            return;
+        }
+        
+        suggestions.forEach(suggestion => {
+            const suggestionItem = document.createElement('div');
+            suggestionItem.className = 'suggestion-item';
+            suggestionItem.textContent = suggestion;
+            suggestionItem.addEventListener('click', () => {
+                document.getElementById('customDeviceName').value = suggestion;
+                suggestionsContainer.style.display = 'none';
+            });
+            suggestionsContainer.appendChild(suggestionItem);
+        });
+        
+        suggestionsContainer.style.display = 'block';
+    }
+
+    // Fetch user's saved devices from backend
+    async function fetchSavedDevices() {
+        try {
+            const response = await fetch('/get_energy_devices');
+            if (!response.ok) {
+                throw new Error('Failed to fetch devices');
+            }
+            const data = await response.json();
+            
+            // Merge with existing selections without duplicates
+            const newDevices = data.devices.filter(device => !selectedDevices.includes(device));
+            selectedDevices = [...selectedDevices, ...newDevices];
+            
+            updateSelectedDevicesList();
+        } catch (error) {
+            console.error('Error fetching devices:', error);
+            showNotification('Failed to load saved devices', true);
+        }
+    }
+
+    // Get user ID and initialize page
+    async function initializePage() {
+        try {
+            const response = await fetch('/get_user_id');
+            if (!response.ok) {
+                throw new Error('Failed to get user ID');
+            }
+            const data = await response.json();
+            userId = data.user_id;
+            
+            // Load saved devices
+            await fetchSavedDevices();
+        } catch (error) {
+            console.error('Initialization error:', error);
+            showNotification('Error initializing page', true);
+        }
+    }
+
+    // Save devices to backend
+    async function saveDevices() {
+        if (selectedDevices.length === 0) {
+            showNotification('Please select at least one device', true);
+            return;
+        }
+
+        try {
+            const response = await fetch('/save_energy_devices', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ devices: selectedDevices }),
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to save devices');
+            }
+
+            showNotification('Devices saved successfully!', false);
+        } catch (error) {
+            console.error('Error saving devices:', error);
+            showNotification('Failed to save devices', true);
+        }
+    }
+
+    // TV Selection Logic
+    document.getElementById('tvType').addEventListener('change', function() {
+        document.getElementById('tvSizeSelection').style.display = this.value ? 'block' : 'none';
+    });
+
+    document.getElementById('addTV').addEventListener('click', function() {
+        const tvType = document.getElementById('tvType').value;
+        const tvSize = document.getElementById('tvSize').value;
+        
+        if (tvType && tvSize) {
+            const deviceName = `${tvType} TV (${tvSize} inches)`;
+            addDevice(deviceName);
+            document.getElementById('tvType').value = '';
+            document.getElementById('tvSize').value = '';
+            document.getElementById('tvSizeSelection').style.display = 'none';
+        } else {
+            alert('Please select both TV type and size.');
+        }
+    });
+
+    // Add event listeners to device items
+    document.querySelectorAll('.device-item').forEach(item => {
+        item.addEventListener('click', () => {
+            const deviceName = item.getAttribute('data-device');
+            addDevice(deviceName);
+        });
+    });
+
+    // Show/hide the "Other" form
+    document.getElementById('otherButton').addEventListener('click', () => {
+        const form = document.getElementById('otherDeviceForm');
+        form.style.display = form.style.display === 'none' ? 'block' : 'none';
+        // Focus on input when form is shown
+        if (form.style.display === 'block') {
+            document.getElementById('customDeviceName').focus();
+        }
+    });
+
+    // Add autocomplete suggestions to custom device input
+    document.getElementById('customDeviceName').addEventListener('input', function() {
+        const input = this.value.toLowerCase();
+        if (input.length < 2) {
+            document.getElementById('suggestionsContainer').style.display = 'none';
+            return;
+        }
+        
+        const suggestions = Object.keys(predefinedDeviceEmissions)
+            .filter(device => device.toLowerCase().includes(input))
+            .slice(0, 5); // Show top 5 matches
+            
+        showSuggestions(suggestions);
+    });
+
+    // Add custom device with case-insensitive matching
+    document.getElementById('addCustomDevice').addEventListener('click', () => {
+        const deviceName = document.getElementById('customDeviceName').value.trim();
+        
+        if (deviceName) {
+            const normalized = deviceName.toLowerCase().replace(/\s+/g, '');
+            
+            if (normalizedDeviceNames[normalized]) {
+                // Use the properly formatted device name
+                addDevice(normalizedDeviceNames[normalized]);
+            } else {
+                // Add custom device with default emission factor
+                predefinedDeviceEmissions[deviceName] = 0.23;
+                addDevice(deviceName);
+            }
+            document.getElementById('customDeviceName').value = '';
+            document.getElementById('otherDeviceForm').style.display = 'none';
+            document.getElementById('suggestionsContainer').style.display = 'none';
+            showNotification('Device added successfully!', false);
+        } else {
+            alert('Please enter a device name.');
+        }
+    });
+
+    // Save button functionality
+    document.getElementById('saveButton').addEventListener('click', saveDevices);
+
+    // Show notification message
+    function showNotification(message, isError) {
+        const notification = document.createElement('div');
+        notification.textContent = message;
+        notification.style.position = 'fixed';
+        notification.style.top = '20px';
+        notification.style.right = '20px';
+        notification.style.padding = '10px 20px';
+        notification.style.backgroundColor = isError ? '#dc3545' : '#28a745';
+        notification.style.color = 'white';
+        notification.style.borderRadius = '5px';
+        notification.style.zIndex = '1000';
+        document.body.appendChild(notification);
+        
+        setTimeout(() => {
+            notification.style.display = 'none';
+            document.body.removeChild(notification);
+        }, 3000);
+    }
+
+    // Close suggestions when clicking outside
+    document.addEventListener('click', (event) => {
+        if (!event.target.closest('#otherDeviceForm') && !event.target.closest('#suggestionsContainer')) {
+            document.getElementById('suggestionsContainer').style.display = 'none';
+        }
+    });
+
+    // Initialize the page when loaded
+    document.addEventListener('DOMContentLoaded', initializePage);
+</script>
+</body>
+</html>

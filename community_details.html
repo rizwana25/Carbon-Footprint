@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ community.name }} - Community Hub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #27AE60;
+            --secondary: #2F80ED;
+            --background: #F3F4F6;
+            --text: #333333;
+            --card-bg: #FFFFFF;
+            --danger: #EB5757;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--background);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+
+        .community-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 2rem;
+            background: var(--card-bg);
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .community-title {
+            font-size: 2.5rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            padding: 1.5rem;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2.25rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .members-section {
+            background: var(--card-bg);
+            border-radius: 1rem;
+            padding: 2rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+
+        .member-card {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            background: var(--background);
+            border-radius: 0.75rem;
+            transition: transform 0.2s ease;
+        }
+
+        .member-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .admin-member {
+            border-left: 4px solid var(--secondary);
+            background: rgba(47, 128, 237, 0.05);
+        }
+
+        .member-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 500;
+            margin-right: 1rem;
+        }
+
+        .admin-badge {
+            background: var(--secondary);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            margin-left: 0.5rem;
+        }
+
+        .member-role {
+            font-size: 0.75rem;
+            color: var(--secondary);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.75rem 1.5rem;
+            background: var(--primary);
+            color: white;
+            border-radius: 0.75rem;
+            text-decoration: none;
+            transition: background 0.2s ease;
+        }
+
+        .back-button:hover {
+            background: #219653;
+        }
+
+        .admin-actions {
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--background);
+        }
+
+        .danger-zone {
+            background: #ffebee;
+            padding: 1.5rem;
+            border-radius: 0.75rem;
+            margin-top: 2rem;
+            border-left: 4px solid var(--danger);
+        }
+
+        .danger-zone h3 {
+            color: var(--danger);
+            margin-bottom: 1rem;
+        }
+
+        .daily-rankings {
+            background: var(--card-bg);
+            border-radius: 1rem;
+            padding: 2rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+
+        .daily-rankings h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+        }
+
+        .ranking-item {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+            background: var(--background);
+            border-radius: 0.75rem;
+            transition: transform 0.2s ease;
+        }
+
+        .ranking-item:hover {
+            transform: translateX(5px);
+        }
+
+        .rank-number {
+            font-weight: 600;
+            color: var(--primary);
+            margin-right: 1rem;
+            min-width: 2rem;
+        }
+
+        .member-name {
+            flex: 1;
+            font-weight: 500;
+        }
+
+        .emission-value {
+            color: var(--text);
+            font-weight: 500;
+            margin-right: 1rem;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 2rem;
+            height: 2rem;
+            border-radius: 50%;
+            font-size: 1.25rem;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .badge.gold {
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            box-shadow: 0 2px 4px rgba(255, 215, 0, 0.3);
+        }
+
+        .badge.silver {
+            background: linear-gradient(135deg, #C0C0C0, #A9A9A9);
+            box-shadow: 0 2px 4px rgba(192, 192, 192, 0.3);
+        }
+
+        .badge.bronze {
+            background: linear-gradient(135deg, #CD7F32, #B87333);
+            box-shadow: 0 2px 4px rgba(205, 127, 50, 0.3);
+        }
+
+        .badge-tooltip {
+            position: absolute;
+            bottom: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--text);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            white-space: nowrap;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+            pointer-events: none;
+        }
+
+        .badge:hover .badge-tooltip {
+            opacity: 1;
+        }
+
+        .loading {
+            text-align: center;
+            color: var(--text);
+            padding: 2rem;
+        }
+
+        @keyframes celebrate {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        .badge.celebrate {
+            animation: celebrate 0.5s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="community-header">
+            <h1 class="community-title">{{ community.name }}</h1>
+            <p>Community Code: <strong>{{ community.unique_code }}</strong></p>
+            <p>Created by: <strong>{{ community.admin_name }}</strong></p>
+            {% if is_admin %}
+                <p><i class="fas fa-crown"></i> You are the administrator of this community</p>
+            {% endif %}
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value">{{ "%.1f"|format(total_emissions) }}</div>
+                <p>Total Emissions (kg CO₂)</p>
+            </div>
+            <div class="stat-card">
+              <div class="stat-value">{{ community.member_count }}</div>
+                <p>Total Members</p>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">{{ total_entries }}</div>
+                <p>Activity Entries</p>
+            </div>
+        </div>
+
+        <!-- Community Statistics -->
+        <div class="community-stats">
+            <h3>Community Statistics</h3>
+            <p>Total Emissions: {{ total_emissions|round(2) }} kg CO₂</p>
+            <p>Total Entries: {{ total_entries }}</p>
+        </div>
+
+        <!-- Daily Rankings Section -->
+        <div class="daily-rankings">
+            <h3>Today's Rankings</h3>
+            <div id="rankings-container">
+                <div class="loading">Loading rankings...</div>
+            </div>
+        </div>
+
+        <div class="members-section">
+            <h2 style="font-size: 1.5rem; margin-bottom: 1.5rem;">Community Members</h2>
+            
+            <!-- Admin Card -->
+            <div class="member-card admin-member">
+              <div class="member-avatar">
+                  {{ community.admin_name[0]|upper if community.admin_name else 'A' }}
+              </div>
+              <div style="flex: 1;">
+                  <div style="font-weight: 500; display: flex; align-items: center;">
+                      {{ community.admin_name }}
+                      <span class="admin-badge">Admin</span>
+                  </div>
+                  <div style="font-size: 0.875rem; color: #6B7280;">
+                      Created this community
+                  </div>
+              </div>
+          </div>
+          
+            
+            <!-- Member Cards -->
+            {% for member in members %}
+            {% if not member.is_admin %}
+
+            <div class="member-card">
+                <div class="member-avatar">
+                    {{ member.display_name[0]|upper if member.display_name else 'M' }}
+                </div>
+                <div style="flex: 1;">
+                    <div style="font-weight: 500;">
+                        {{ member.display_name if member.display_name else "Member" }}
+                        {% if member.role == 'Admin' %}
+                            <span class="admin-badge">Admin</span>
+                        {% endif %}
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div style="font-size: 0.875rem; color: #6B7280;">
+                            Joined {{ member.joined_at.strftime('%b %d, %Y') }}
+                        </div>
+                        <div class="member-role">
+                            {{ member.role }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            {% endfor %}
+        </div>
+
+        {% if is_admin %}
+        <div class="danger-zone">
+            <h3><i class="fas fa-exclamation-triangle"></i> Admin Actions</h3>
+            <form method="POST" action="{{ url_for('delete_community', community_id=community.id) }}" 
+                  onsubmit="return confirm('Are you sure you want to delete this community? This action cannot be undone.');">
+                <button type="submit" class="btn" style="background-color: var(--danger);">
+                    <i class="fas fa-trash"></i> Delete Community
+                </button>
+            </form>
+        </div>
+        {% else %}
+        <div class="admin-actions">
+            <form method="POST" action="{{ url_for('leave_community', community_id=community.id) }}" 
+                  onsubmit="return confirm('Are you sure you want to leave this community?');">
+                <button type="submit" class="btn" style="background-color: var(--warning);">
+                    <i class="fas fa-sign-out-alt"></i> Leave Community
+                </button>
+            </form>
+        </div>
+        {% endif %}
+
+        <a href="{{ url_for('community_page') }}" class="back-button">
+            <i class="fas fa-arrow-left" style="margin-right: 0.5rem;"></i>
+            Back to Communities
+        </a>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Copy community code functionality
+            const communityCode = document.querySelector('.community-header strong');
+            if (communityCode) {
+                communityCode.style.cursor = 'pointer';
+                communityCode.title = 'Click to copy';
+                
+                communityCode.addEventListener('click', function() {
+                    const textToCopy = this.textContent.trim();
+                    navigator.clipboard.writeText(textToCopy).then(() => {
+                        const originalText = this.textContent;
+                        this.textContent = 'Copied!';
+                        setTimeout(() => {
+                            this.textContent = originalText;
+                        }, 2000);
+                    });
+                });
+            }
+        });
+
+        function updateRankings() {
+            const communityId = {{ community.id }};
+            fetch(`/community/${communityId}/daily_rankings`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        const container = document.getElementById('rankings-container');
+                        container.innerHTML = '';
+                        
+                        if (data.rankings.length === 0) {
+                            container.innerHTML = '<p>No submissions yet today. Be the first to submit!</p>';
+                            return;
+                        }
+                        
+                        data.rankings.forEach(ranking => {
+                            const rankingElement = document.createElement('div');
+                            rankingElement.className = 'ranking-item';
+                            
+                            let badgeHtml = '';
+                            if (ranking.badge) {
+                                badgeHtml = `
+                                    <span class="badge ${ranking.badge.type}" title="${ranking.badge.tooltip}">
+                                        ${ranking.badge.emoji}
+                                        <span class="badge-tooltip">${ranking.badge.tooltip}</span>
+                                    </span>
+                                `;
+                            }
+                            
+                            rankingElement.innerHTML = `
+                                <span class="rank-number">#${ranking.rank}</span>
+                                <span class="member-name">${ranking.display_name}</span>
+                                <span class="emission-value">${ranking.total_emissions.toFixed(2)} kg CO₂</span>
+                                ${badgeHtml}
+                            `;
+                            
+                            container.appendChild(rankingElement);
+                        });
+                        
+                        // Add celebration animation to badges
+                        document.querySelectorAll('.badge').forEach(badge => {
+                            badge.addEventListener('mouseover', () => {
+                                badge.classList.add('celebrate');
+                            });
+                            badge.addEventListener('animationend', () => {
+                                badge.classList.remove('celebrate');
+                            });
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching rankings:', error);
+                    document.getElementById('rankings-container').innerHTML = 
+                        '<p>Error loading rankings. Please try again later.</p>';
+                });
+        }
+
+        // Update rankings every 5 minutes
+        updateRankings();
+        setInterval(updateRankings, 300000);
+    </script>
+</body>
+</html>

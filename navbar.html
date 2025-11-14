@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>CARBON FOOT PRINT</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    /* General Styles */
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      color: #333;
+    }
+
+    h1 {
+      color: #2E7D32;
+    }
+
+    p {
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+
+    /* Navigation Bar */
+    .navbar {
+      background-color: #f9f9f9;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    #cf_nav {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 10px 0;
+    }
+
+    .cf-nav__item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 0 15px;
+      color: #2E7D32;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .cf-nav__item--active {
+      border-bottom: 2px solid #2E7D32;
+    }
+
+    .cf-nav__item img {
+      width: 36px;
+      height: 36px;
+    }
+
+    .cf-nav__item div {
+      margin-top: 5px;
+      font-size: 14px;
+    }
+
+    .cf-nav__item:hover {
+      color: #66BB6A;
+    }
+
+    /* Main Content */
+    main {
+      padding: 20px;
+    }
+
+    section {
+      margin-bottom: 40px;
+    }
+
+    /* Footer */
+    footer {
+      background-color: #f0f0f0;
+      text-align: center;
+      padding: 15px 0;
+      border-top: 1px solid #e0e0e0;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <div id="cf_nav" class="cf-nav__no-settings">
+      <a class="cf-nav__item cf-nav__item--active" href="user.html">
+        <img src="assets/icons/user.svg" alt="User">
+        <div>User</div>
+      </a>
+      <a class="cf-nav__item" href="details.htm">
+        <img src="assets/icons/details.svg" alt="Details">
+        <div>Details</div>
+      </a>
+      <a class="cf-nav__item" href="main.html">
+        <img src="assets/icons/main.svg" alt="Main">
+        <div>Main</div>
+      </a>
+      <a class="cf-nav__item" href="transportation.html">
+        <img src="assets/icons/transport.svg" alt="Transportation">
+        <div>Transportation</div>
+      </a>
+      <a class="cf-nav__item" href="home.html">
+        <img src="assets/icons/home.svg" alt="Home">
+        <div>Home</div>
+      </a>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main>
+    <section id="home-use">
+      <h1>Welcome to Your Website</h1>
+      <p>Navigate through the sections using the links above to explore different aspects of your site.</p>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2023 Your Website</p>
+  </footer>
+
+</body>
+</html>
